@@ -17,11 +17,11 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-from WhenInRome import views
 from django.urls import include
+from WhenInRome import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('WhenInRome/', include('WhenInRome.urls')),
+    path('wheninrome/', include('WhenInRome.urls')),
     path('admin/', admin.site.urls),
 ]
