@@ -2,9 +2,10 @@ from django.contrib import admin
 from django.urls import path
 from django.urls import include
 from django.http import HttpResponse
+from django.shortcuts import render
 
 def index(request):
-    return HttpResponse("When In Rome Index <a href='/wheninrome/about'>About</a>")
+    return render(request, 'WhenInRome/base.html')
 
 def about(request):
-    return HttpResponse("When In Rome About <a href='/wheninrome/'>Index</a>")
+    return render(request, 'WhenInRome/about.html')
