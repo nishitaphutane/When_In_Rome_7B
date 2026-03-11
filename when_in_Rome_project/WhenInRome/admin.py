@@ -1,5 +1,5 @@
 from django.contrib import admin
-from WhenInRome.models import City, Recommendation, Review, UserProfile, Upvote
+from WhenInRome.models import City, Recommendation, Review, UserProfile
 
 class CityAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}  # Like CategoryAdmin in Rango
