@@ -1,3 +1,4 @@
+import datetime
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -5,12 +6,42 @@ from django.contrib import messages
 from django.http import HttpResponse
 from WhenInRome.forms import UserForm, UserProfileForm
 from WhenInRome.models import UserProfile
+from WhenInRome.models import City
+from WhenInRome.models import Recommendation
 
 def index(request):
-    return HttpResponse("When In Rome Index <a href='/wheninrome/about'>About</a>")
+    category_list=City.objects.order_by('name').values()
+    return render(request, 'wheninrome/city.html') # will update once templates are made so we can access our webapp
 
 def about(request):
-    return HttpResponse("When In Rome About <a href='/wheninrome/'>Index</a>")
+    context_dict = {}
+    print(request.method)
+    print(request.user)
+    visitor_cookie_handler(request)
+    context_dict['visits'] = request.session['visits']
+    response = render(request, 'wheninrome/about.html', context=context_dict)
+    return response
+
+def show_category(request, category_name_slug):
+    context_dict = {}
+    try:
+        city = City.objects.get(slug=category_name_slug)
+        recommendations = Recommendation.objects.filter(city=city)
+        context_dict['recommendations'] = recommendations
+        context_dict['city'] = city
+    except City.DoesNotExist:
+        context_dict['city'] = None
+        context_dict['recommendations'] = None
+    return render(request, 'wheninrome/category.html', context=context_dict)
+
+@login_required
+def add_recommendation(request):
+    # Will do once ReccomendationForm method is made in forms
+    pass
+
+@login_required
+def add_city(request):
+    pass
 
 def register(request):
     registered = False
@@ -76,3 +107,20 @@ def profile(request):
     return render(request, 'WhenInRome/profile.html', {
         'user_profile': user_profile,
     })
+
+def get_server_side_cookie(request, cookie, default_val=None):
+    val = request.session.get(cookie)
+    if not val:
+        val = default_val
+    return val
+
+def visitor_cookie_handler(request):
+    visits = int(get_server_side_cookie(request, 'visits', '1'))
+    last_visit_cookie = get_server_side_cookie(request, 'last_visit', str(datetime.now()))
+    last_visit_time = datetime.strptime(last_visit_cookie[:-7], '%Y-%m-%d %H:%M:%S')
+    if (datetime.now() - last_visit_time).days > 0:
+        visits = visits + 1
+        request.session['last_visit'] = str(datetime.now())
+    else:
+        request.session['last_visit'] = last_visit_cookie
+    request.session['visits'] = visits
