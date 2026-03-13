@@ -90,6 +90,15 @@ def user_login(request):
             return HttpResponse('Invalid login details supplied.')
     else:
         return render(request, 'wheninrome/index.html')
+    
+@login_required
+def restricted(request):
+    return render(request, 'wheninrome/index.html')
+
+@login_required
+def user_logout(request):
+    logout(request)
+    return redirect(reversed('wheninrome/index.html'))
 
 def get_server_side_cookie(request, cookie, default_val=None):
     val = request.session.get(cookie)
