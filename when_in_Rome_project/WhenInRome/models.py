@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 
+#ask if i should delete then do this after what they say
+#cd when_in_Rome_project python manage.py makemigrations
 #model to store information about cities
 
 class City(models.Model):
@@ -15,11 +17,10 @@ class City(models.Model):
         super(City, self).save(*args, **kwargs)
 
     class Meta:
-        verbose_name_plural = 'Cities'
+        verbose_name_plural = 'Categories'
 
     def __str__(self):
         return self.name
-
 
 #model for recommendations to visit places 
 class Recommendation(models.Model):
@@ -36,7 +37,6 @@ class Recommendation(models.Model):
 
     def __str__(self):
         return self.title
-
 
 #model to store user profiles, including bio and profile picture
 class UserProfile(models.Model):
@@ -64,4 +64,3 @@ class Upvote(models.Model):
 
     def __str__(self):
         return f"{self.user.username} upvoted {self.recommendation.title}"
-    

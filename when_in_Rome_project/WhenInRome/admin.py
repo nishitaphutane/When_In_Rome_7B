@@ -1,5 +1,5 @@
 from django.contrib import admin
-from WhenInRome.models import City, Recommendation, Review, UserProfile, Upvote
+from WhenInRome.models import City, Recommendation, Review, UserProfile, Upvote 
 
 #fills the slug field automatically based on the name of the city or title of the recommendation (all)
 
