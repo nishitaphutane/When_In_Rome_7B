@@ -1,0 +1,14 @@
+{% extends 'WhenInRome/base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <h1>{{ user.username }}'s Profile</h1>
+
+    {% if user_profile.picture %}
+        <img src="{{ user_profile.picture.url }}" alt="{{ user.username }}" width="200">
+    {% endif %}
+
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Bio:</strong> {{ user_profile.bio }}</p>
+</div>
+{% endblock %}
