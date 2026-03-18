@@ -8,8 +8,10 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     #added this part
     path('category/<slug:category_name_slug>/', views.show_category, name='show_category'),
-    #path('register/', views.register, name='register'),
-    #path('login/', views.user_login, name='login'),
-    #path('logout/', views.user_logout, name='logout'),
-    #path('profile/', views.profile, name='profile'),
+    path('register/', views.register, name='register'),
+    path('login/', views.user_login, name='login'),
+    path('logout/', views.user_logout, name='logout'),
+    path('profiles/', views.list_profiles, name='list_profiles'),
+    path('profile/<str:username>/', views.profile, name='profile'),
+    path('profile/<str:username>/follow/', views.follow_user, name='follow_user'),
 ]
