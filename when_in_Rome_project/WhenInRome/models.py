@@ -2,8 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 
-#ask if i should delete then do this after what they say
-#cd when_in_Rome_project python manage.py makemigrations
 #model to store information about cities
 
 class City(models.Model):
