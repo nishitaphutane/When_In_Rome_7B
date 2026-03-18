@@ -38,11 +38,16 @@ class Recommendation(models.Model):
     def __str__(self):
         return self.title
 
-#model to store user profiles, including bio and profile picture
+#model to store user profiles, including bio, profile picture, and followers and each follower is a normal Django User.
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(blank=True)
     picture = models.ImageField(upload_to='profile_images', blank=True)
+    followers = models.ManyToManyField(
+        User,
+        blank=True,
+        related_name='following_profiles'
+    )
 
     def __str__(self):
         return self.user.username
