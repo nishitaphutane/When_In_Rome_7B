@@ -37,6 +37,10 @@ class Recommendation(models.Model):
 
     def __str__(self):
         return self.title
+    
+    @property
+    def upvote_count(self):
+        return self.upvote_set.count()
 
 #model to store user profiles, including bio, profile picture, and followers and each follower is a normal Django User.
 class UserProfile(models.Model):

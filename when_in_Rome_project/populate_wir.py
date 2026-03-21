@@ -1,64 +1,117 @@
 import os
-os.environ.setdefault('DJANGO_SETTINGS_MODULE',
-                      'when_in_Rome_project.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'when_in_Rome_project.settings')
+
 import django
 django.setup()
-from WhenInRome.models import Category, Page
+
+from django.contrib.auth.models import User
+from WhenInRome.models import City, Recommendation, UserProfile, Review, Upvote
+
 
 def populate():
-    python_pages = [
-        {'title': 'Official Python Tutorial',
-         'url':'http://docs.python.org/3/tutorial/',
-         'views' : 15},
-        {'title':'How to Think like a Computer Scientist',
-         'url':'http://www.greenteapress.com/thinkpython/',
-         'views' : 46},
-        {'title':'Learn Python in 10 Minutes',
-         'url':'http://www.korokithakis.net/tutorials/python/',
-         'views' : 3} ]
-    django_pages = [
-        {'title':'Official Django Tutorial',
-         'url':'https://docs.djangoproject.com/en/2.1/intro/tutorial01/',
-         'views' : 9},
-        {'title':'Django Rocks',
-         'url':'http://www.djangorocks.com/',
-         'views' : 16},
-        {'title':'How to Tango with Django',
-         'url':'http://www.tangowithdjango.com/',
-         'views' : 23} ]
-    other_pages = [
-        {'title':'Bottle',
-         'url':'http://bottlepy.org/docs/dev/',
-         'views' : 34},
-        {'title':'Flask',
-         'url':'http://flask.pocoo.org',
-         'views' : 42} ]
-    cats = {'Landmarks': {'pages': python_pages, 'views' : 128, 'likes' : 64, 'image': 'landmarks.jpg'},
-            'Food': {'pages': django_pages, 'views' : 64, 'likes' : 32, 'image': 'food.jpg'},
-            'Transportation': {'pages': other_pages, 'views' : 32, 'likes' : 16, 'image': 'transportation.jpg'} }
-    for cat, cat_data in cats.items():
-        c = add_cat(cat, views=cat_data['views'], likes=cat_data['likes'], image=cat_data['image'])
-        for p in cat_data['pages']:
-            add_page(c, p['title'], p['url'], p['views'])
+    users_data = [
+        {'username': 'johnsmith', 'password': 'test123'},
+        {'username': 'rachelgarcia', 'password': 'test123'},
+        {'username': 'stevenwong', 'password': 'test123'},
+    ]
 
-    for c in Category.objects.all():
-        for p in Page.objects.filter(category=c):
-            print(f'- {c}: {p}')
+    users = []
+    for u in users_data:
+        user = add_user(u['username'], u['password'])
+        add_user_profile(user)
+        users.append(user)
 
-def add_page(cat, title, url, views=0):
-    p = Page.objects.get_or_create(category=cat, title=title)[0]
-    p.url=url
-    p.views=views
-    p.save()
-    return p
-##and here
-def add_cat(name, views=0, likes=0, image='default.jpg'):
-    c = Category.objects.get_or_create(name=name)[0]
-    c.views=views
-    c.likes=likes
-    c.image_name=image
+    cities_data = {
+        'Glasgow': {
+            'country': 'Scotland',
+            'description': 'A vibrant cultural city',
+            'recommendations': [
+                {'title': 'Kelvingrove Art Gallery', 'description': 'Art and museum', 'location': 'Kelvingrove'},
+                {'title': 'Glasgow Cathedral', 'description': 'Historic cathedral', 'location': 'Cathedral Square'},
+            ]
+        },
+        'Edinburgh': {
+            'country': 'Scotland',
+            'description': 'Historic capital city',
+            'recommendations': [
+                {'title': 'Edinburgh Castle', 'description': 'Famous fortress', 'location': 'Castle Rock'},
+                {'title': 'Arthur’s Seat', 'description': 'Great hike and views', 'location': 'Holyrood Park'},
+            ]
+        }
+    }
+
+    for city_name, city_data in cities_data.items():
+        c = add_city(city_name, city_data['country'], city_data['description'])
+
+        for rec in city_data['recommendations']:
+            r = add_recommendation(
+                city=c,
+                user=users[0],
+                title=rec['title'],
+                description=rec['description'],
+                location=rec['location']
+            )
+
+            add_review(r, users[1], rating=5, comment="Amazing!")
+            add_review(r, users[2], rating=4, comment="Really good!")
+
+            add_upvote(r, users[1])
+            add_upvote(r, users[2])
+
+    for c in City.objects.all():
+        for r in Recommendation.objects.filter(city=c):
+            print(f'- {c}: {r}')
+
+
+def add_user(username, password):
+    user, created = User.objects.get_or_create(username=username)
+    if created:
+        user.set_password(password)
+        user.save()
+    return user
+
+
+def add_user_profile(user):
+    profile, created = UserProfile.objects.get_or_create(user=user)
+    profile.bio = f"Hi, I'm {user.username}"
+    profile.save()
+    return profile
+
+
+def add_city(name, country, description):
+    c, created = City.objects.get_or_create(name=name)
+    c.country = country
+    c.description = description
     c.save()
     return c
+
+
+def add_recommendation(city, user, title, description, location):
+    r, created = Recommendation.objects.get_or_create(city=city, title=title, user=user)
+    r.description = description
+    r.location = location
+    r.save()
+    return r
+
+
+def add_review(recommendation, user, rating, comment):
+    review, created = Review.objects.get_or_create(recommendation=recommendation,user=user,defaults={'rating': rating,'comment': comment})
+
+    if not created:
+        review.rating = rating
+        review.comment = comment
+        review.save()
+
+    return review
+
+
+def add_upvote(recommendation, user):
+    upvote, created = Upvote.objects.get_or_create(
+        recommendation=recommendation,
+        user=user
+    )
+    return upvote
+
 
 if __name__ == '__main__':
     print('Starting When In Rome population script...')
