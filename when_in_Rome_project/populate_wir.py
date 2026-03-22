@@ -7,12 +7,16 @@ django.setup()
 from django.contrib.auth.models import User
 from WhenInRome.models import City, Recommendation, UserProfile, Review, Upvote
 
+import random
 
 def populate():
     users_data = [
         {'username': 'johnsmith', 'password': 'test123'},
         {'username': 'rachelgarcia', 'password': 'test123'},
         {'username': 'stevenwong', 'password': 'test123'},
+        {'username': 'oliviawilson', 'password' : 'test123'},
+        {'username': 'christaylor', 'password': 'test123'},
+
     ]
 
     users = []
@@ -20,6 +24,12 @@ def populate():
         user = add_user(u['username'], u['password'])
         add_user_profile(user)
         users.append(user)
+    
+    for user in users:
+        potential_followers = [u for u in users if u != user]
+        followers = random.sample(potential_followers, k=random.randint(1, len(potential_followers)))
+        add_followers(user, followers)
+
 
     cities_data = {
         'Glasgow': {
@@ -55,8 +65,9 @@ def populate():
             add_review(r, users[1], rating=5, comment="Amazing!")
             add_review(r, users[2], rating=4, comment="Really good!")
 
-            add_upvote(r, users[1])
-            add_upvote(r, users[2])
+            for user in users:
+                if random.random() > 0.5:
+                    add_upvote(r, user)
 
     for c in City.objects.all():
         for r in Recommendation.objects.filter(city=c):
@@ -112,6 +123,12 @@ def add_upvote(recommendation, user):
     )
     return upvote
 
+def add_followers(user, followers):
+    profile = UserProfile.objects.get(user=user)
+    for follower in followers:
+        profile.followers.add(follower)
+    profile.save()
+    return profile
 
 if __name__ == '__main__':
     print('Starting When In Rome population script...')
