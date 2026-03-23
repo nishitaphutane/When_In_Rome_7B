@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render
-from WhenInRome.forms import UserForm, UserProfileForm
+from WhenInRome.forms import UserForm, UserProfileForm, RecommendationForm
 from WhenInRome.models import City, Recommendation, UserProfile
 from django.urls import reverse
 
@@ -42,7 +42,29 @@ def add_category(request):
 
 @login_required
 def add_page(request, category_name_slug):
-    pass
+    try:
+        category = City.objects.get(slug=category_name_slug)
+    except City.DoesNotExist:
+        category = None
+
+    if category is None:
+        return redirect('/wheninrome/')
+    
+    form = RecommendationForm()
+
+    if request.method == 'POST':
+        form = RecommendationForm(request.POST)
+    
+    if form.is_valid():
+        if category:
+            recommendation = form.save(commit=False)
+            recommendation.category = category
+            recommendation.views = 0
+            recommendation.save()
+
+            return redirect(reverse('wheninrome:show_category', kwargs={'category_name_slug': category_name_slug}))
+        else:
+            print(form.errors)
 
 def register(request):
     registered = False
