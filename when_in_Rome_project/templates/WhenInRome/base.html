@@ -33,28 +33,42 @@
             </form>
         </div>
     </section>
+    
     <div class="container mt-5">
-        <div class="row">
-            <aside class="col-lg-3 pe-lg-5">
-                <div class="sort-container mb-4">
-                    <select class="form-select sort-box shadow-sm">
-                        <option selected>Sort By </option>
-                        <option value="1">Highest Rating</option>
-                        <option value="2">Most Recent</option>
-                    </select>
-                </div>
-                <div class="filter-results">
-                    <h5 class="fw-bold mb-3"> Filter Results</h5>
-                    <div class="filter-item border-bottom py-3 d-flex justify-content-between">
-                        <span>Country</span> <span class="plus-icon">+</span>
+        {% if request.path == '/wheninrome/login/' or request.path == '/wheninrome/register/' %}
+            <div class="w-100" id="page-content-wrapper">
+        {% else %}
+            <div class="row">
+                <aside class="col-lg-3 pe-lg-5">
+                    <div class="sort-container mb-4">
+                        <select class="form-select sort-box shadow-sm">
+                            <option selected>Sort By</option>
+                            <option value="1">Highest Rating</option>
+                            <option value="2">Most Recent</option>
+                        </select>
                     </div>
-                </div>
-            </aside>
-            <section class="col-lg-9">
-                {% block content %}
-                {% endblock %}
-            </section>
-        </div>
+
+                    <div class="filter-results">
+                        <h5 class="fw-bold mb-3">Filter Results</h5>
+                        <div class="filter-item border-bottom py-3 d-flex justify-content-between">
+                            <span>Country</span>
+                            <span class="plus-icon">+</span>
+                        </div>
+                    </div>
+                </aside>
+
+                <section class="col-lg-9" id="page-content-wrapper">
+        {% endif %}
+
+                    {% block content %}
+                    {% endblock %}
+
+        {% if request.path == '/wheninrome/login/' or request.path == '/wheninrome/register/' %}
+            </div>
+        {% else %}
+                </section>
+            </div>
+        {% endif %}
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

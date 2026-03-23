@@ -6,25 +6,27 @@
         <a href="{% url 'WhenInRome:index' %}">Home</a> &gt; Login
     </p>
 
-    <h1>Login</h1>
+    <center>
+        <h1>Login</h1>
 
-    <form id="login_form" method="post" action="{% url 'WhenInRome:login' %}">
-        {% csrf_token %}
+        <form id="login_form" method="post" action="{% url 'WhenInRome:login' %}">
+            {% csrf_token %}
 
-        <p>
-            <label for="id_username">Username</label><br>
-            <input type="text" name="username" id="id_username" placeholder="Enter your username">
-        </p>
+            <p>
+                <label for="id_username">Username</label><br>
+                <input type="text" name="username" id="id_username" placeholder="Enter your username">
+            </p>
 
-        <p>
-            <label for="id_password">Password</label><br>
-            <input type="password" name="password" id="id_password" placeholder="Enter your password">
-        </p>
+            <p>
+                <label for="id_password">Password</label><br>
+                <input type="password" name="password" id="id_password" placeholder="Enter your password">
+            </p>
 
-        <input type="submit" value="Login">
-    </form>
+            <input type="submit" value="Login">
+        </form>
 
-    <p>Don’t have an account?</p>
-    <p><a href="{% url 'WhenInRome:register' %}">Sign Up</a></p>
+        <p>Don’t have an account?</p>
+        <p><a href="{% url 'WhenInRome:register' %}">Sign Up</a></p>
+    </center>
 </div>
 {% endblock %}

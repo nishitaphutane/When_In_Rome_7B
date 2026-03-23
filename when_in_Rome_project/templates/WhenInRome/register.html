@@ -1,41 +1,47 @@
 {% extends 'WhenInRome/base.html' %}
 
 {% block content %}
+
+
 <div>
+    
     <p>
         <a href="{% url 'WhenInRome:index' %}">Home</a> &gt; Sign Up
     </p>
 
-    {% if registered %}
-        <h1>Sign Up</h1>
-        <p>Thank you for registering!</p>
-        <p><a href="{% url 'WhenInRome:login' %}">Login</a></p>
-    {% else %}
-        <h1>Sign Up</h1>
+        <center>
+        {% if registered %}
+            <h1>Sign Up</h1>
+            <p>Thank you for registering!</p>
+            <p><a href="{% url 'WhenInRome:login' %}">Login</a></p>
+        {% else %}
+            <h1>Sign Up</h1>
 
-        <form id="user_form" method="post" action="{% url 'WhenInRome:register' %}" enctype="multipart/form-data">
-            {% csrf_token %}
+            
+            <form id="user_form" method="post" action="{% url 'WhenInRome:register' %}" enctype="multipart/form-data">
+                {% csrf_token %}
 
-            <p>
-                <label for="{{ user_form.username.id_for_label }}">Username</label><br>
-                {{ user_form.username }}
-            </p>
+                <p>
+                    <label for="{{ user_form.username.id_for_label }}">Username</label><br>
+                    {{ user_form.username }}
+                </p>
 
-            <p>
-                <label for="{{ user_form.password.id_for_label }}">Password</label><br>
-                {{ user_form.password }}
-            </p>
+                <p>
+                    <label for="{{ user_form.password.id_for_label }}">Password</label><br>
+                    {{ user_form.password }}
+                </p>
 
-            <p>
-                <label for="{{ user_form.email.id_for_label }}">Email</label><br>
-                {{ user_form.email }}
-            </p>
+                <p>
+                    <label for="{{ user_form.email.id_for_label }}">Email</label><br>
+                    {{ user_form.email }}
+                </p>
 
-            <input type="submit" name="submit" value="Sign Up">
-        </form>
+                <input type="submit" name="submit" value="Sign Up">
+            </form>
 
-        <p>Already have an account?</p>
-        <p><a href="{% url 'WhenInRome:login' %}">Login</a></p>
-    {% endif %}
+            <p>Already have an account?</p>
+            <p><a href="{% url 'WhenInRome:login' %}">Login</a></p>
+        {% endif %}
+    </center>
 </div>
 {% endblock %}
