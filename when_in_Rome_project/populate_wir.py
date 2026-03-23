@@ -11,17 +11,17 @@ import random
 
 def populate():
     users_data = [
-        {'username': 'johnsmith', 'password': 'test123'},
-        {'username': 'rachelgarcia', 'password': 'test123'},
-        {'username': 'stevenwong', 'password': 'test123'},
-        {'username': 'oliviawilson', 'password' : 'test123'},
-        {'username': 'christaylor', 'password': 'test123'},
-
+        {'username': 'johnsmith', 'password': 'test123', 'email': 'johnsmith@example.com'},
+        {'username': 'rachelgarcia', 'password': 'test123', 'email': 'rachelgarcia@example.com'},
+        {'username': 'stevenwong', 'password': 'test123', 'email': 'stevenwong@example.com'},
+        {'username': 'oliviawilson', 'password': 'test123', 'email': 'oliviawilson@example.com'},
+        {'username': 'christaylor', 'password': 'test123', 'email': 'christaylor@example.com'},
+        {'username': 'jamesstewart', 'password': 'test123', 'email': 'jamesstewart@example.com'},
     ]
 
     users = []
     for u in users_data:
-        user = add_user(u['username'], u['password'])
+        user = add_user(u['username'], u['password'],u['email'])
         add_user_profile(user)
         users.append(user)
     
@@ -74,11 +74,12 @@ def populate():
             print(f'- {c}: {r}')
 
 
-def add_user(username, password):
+def add_user(username, password, email =''):
     user, created = User.objects.get_or_create(username=username)
     if created:
         user.set_password(password)
-        user.save()
+    user.email = email
+    user.save()
     return user
 
 
