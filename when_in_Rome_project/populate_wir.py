@@ -33,12 +33,11 @@ def populate():
         {'title':'Flask',
          'url':'http://flask.pocoo.org',
          'views' : 42} ]
-    cats = {'Python': {'pages': python_pages, 'views' : 128, 'likes' : 64},
-            'Django': {'pages': django_pages, 'views' : 64, 'likes' : 32},
-            'Other Frameworks': {'pages': other_pages, 'views' : 32, 'likes' : 16} }
-
+    cats = {'Landmarks': {'pages': python_pages, 'views' : 128, 'likes' : 64, 'image': 'landmarks.jpg'},
+            'Food': {'pages': django_pages, 'views' : 64, 'likes' : 32, 'image': 'food.jpg'},
+            'Transportation': {'pages': other_pages, 'views' : 32, 'likes' : 16, 'image': 'transportation.jpg'} }
     for cat, cat_data in cats.items():
-        c = add_cat(cat, views=cat_data['views'], likes=cat_data['likes'])
+        c = add_cat(cat, views=cat_data['views'], likes=cat_data['likes'], image=cat_data['image'])
         for p in cat_data['pages']:
             add_page(c, p['title'], p['url'], p['views'])
 
@@ -52,11 +51,12 @@ def add_page(cat, title, url, views=0):
     p.views=views
     p.save()
     return p
-
-def add_cat(name, views=0, likes=0):
+##and here
+def add_cat(name, views=0, likes=0, image='default.jpg'):
     c = Category.objects.get_or_create(name=name)[0]
     c.views=views
     c.likes=likes
+    c.image_name=image
     c.save()
     return c
 

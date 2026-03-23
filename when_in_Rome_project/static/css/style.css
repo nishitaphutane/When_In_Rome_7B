@@ -6,7 +6,7 @@ body.beige-bg {
 }
 .hero-section {
     height: 600px;
-    background: linear-gradient(rgba(0,0,0,0.1), rbga(0,0,0,0.1)),
+    background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)),
                 url('../images/Background.png') no-repeat center center;
     background-size: cover;
     display: flex;
