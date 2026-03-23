@@ -6,7 +6,7 @@ class CityAdmin(admin.ModelAdmin):
 
 class RecommendationAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
-    list_display = ('title', 'city', 'user') 
+    list_display = ('title', 'city', 'user')
 
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ('user', 'recommendation', 'rating')
