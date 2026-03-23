@@ -5,13 +5,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render
+from WhenInRome.models import City, Recommendation, UserProfile,Review,Upvote
 from WhenInRome.forms import UserForm, UserProfileForm, RecommendationForm, CityForm
-from WhenInRome.models import City, Recommendation, UserProfile
 from django.urls import reverse
+from django.db.models import Count
 
 def index(request):
     context_dict = {}
-    category_list = City.objects.order_by('likes')[:5]
+    city_list = City.objects.annotate(total_upvotes=Count('recommendation__upvote')).order_by('-total_upvotes')[:5]
     context_dict['pages'] = None
     return render(request, 'wheninrome/index.html', context=context_dict)
 
