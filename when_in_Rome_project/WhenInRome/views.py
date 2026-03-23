@@ -5,8 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render
-from WhenInRome.forms import UserForm, UserProfileForm
 from WhenInRome.models import City, Recommendation, UserProfile,Review,Upvote
+from WhenInRome.forms import UserForm, UserProfileForm, RecommendationForm, CityForm
 from django.urls import reverse
 from django.db.models import Count
 
@@ -29,7 +29,7 @@ def show_category(request, category_name_slug):
     context_dict = {}
     try:
         category = City.objects.get(slug=category_name_slug)
-        pages = Page.objects.filter(category=category)
+        pages = Recommendation.objects.filter(category=category)
         context_dict['pages'] = pages
         context_dict['category'] = category
     except City.DoesNotExist:
@@ -39,11 +39,42 @@ def show_category(request, category_name_slug):
 
 @login_required
 def add_category(request):
-    pass
+    form = CityForm()
+
+    if request.method == 'POST':
+        form = CityForm(request.POST)
+    if form.is_valid():
+        form.save(commit=True)
+        return redirect('/wheninrome/')
+    else:
+        print(form.errors)
+    return render(request, 'wheninrome/category.html', {'form': form})
 
 @login_required
 def add_page(request, category_name_slug):
-    pass
+    try:
+        category = City.objects.get(slug=category_name_slug)
+    except City.DoesNotExist:
+        category = None
+
+    if category is None:
+        return redirect('/wheninrome/')
+    
+    form = RecommendationForm()
+
+    if request.method == 'POST':
+        form = RecommendationForm(request.POST)
+    
+    if form.is_valid():
+        if category:
+            recommendation = form.save(commit=False)
+            recommendation.category = category
+            recommendation.views = 0
+            recommendation.save()
+
+            return redirect(reverse('wheninrome:show_category', kwargs={'category_name_slug': category_name_slug}))
+        else:
+            print(form.errors)
 
 def register(request):
     registered = False

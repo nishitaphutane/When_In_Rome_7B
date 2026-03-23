@@ -1,20 +1,22 @@
 from django.contrib import admin
-from WhenInRome.models import City, Recommendation, Review, UserProfile, Upvote
+from WhenInRome.models import City, Recommendation, Review, UserProfile, Upvote 
 
-class CategoryAdmin(admin.ModelAdmin):
-    prepopulated_fields = {'slug': ('name',)}
-    list_display = ('name' , 'views', 'likes')
+#fills the slug field automatically based on the name of the city or title of the recommendation (all)
 
-class PageAdmin(admin.ModelAdmin):
-    list_display = ('title', 'views', 'url', 'category')  
 
+#Displays information in list view
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ('user', 'recommendation', 'rating')
 
+#Displays information in list view
 class CityAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('name',)}
     list_display = ('name','country','description')
-
+    
+#Displays information in list view
 class RecommendationAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('title',)}
+    
     def upvote_count(self, obj):
         return obj.upvote_count
     
