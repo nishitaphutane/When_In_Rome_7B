@@ -4,16 +4,37 @@ from WhenInRome.models import UserProfile
 from WhenInRome.models import Recommendation, City
 
 class UserForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput())
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Choose a username'
+        })
+    )
+
+    email = forms.EmailField(
+        required=False,
+        widget=forms.EmailInput(attrs={
+            'placeholder': 'Enter your email (optional)'
+        })
+    )
+
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Choose a password'
+        })
+    )
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password',)
+        fields = ('username', 'email', 'password')
+
 
 class UserProfileForm(forms.ModelForm):
+    bio = forms.CharField(required=False)
+    picture = forms.ImageField(required=False)
+
     class Meta:
         model = UserProfile
-        fields = ('bio', 'picture',)   
+        fields = ('bio', 'picture')
 
 class RecommendationForm(forms.ModelForm):
     title = forms.CharField(max_length=128,
