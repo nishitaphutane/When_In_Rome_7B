@@ -15,7 +15,7 @@ class City(models.Model):
         super(City, self).save(*args, **kwargs)
 
     class Meta:
-        verbose_name_plural = 'Categories'
+        verbose_name_plural = 'Cities'
 
     def __str__(self):
         return self.name
