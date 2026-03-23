@@ -1,19 +1,41 @@
 {% extends 'WhenInRome/base.html' %}
 
 {% block content %}
-<div class="container py-4">
-    <h1>Register for When In Rome</h1>
+<div>
+    <p>
+        <a href="{% url 'WhenInRome:index' %}">Home</a> &gt; Sign Up
+    </p>
 
     {% if registered %}
-        <strong>Thank you for registering!</strong>
-        <a href="{% url 'WhenInRome:index' %}">Return to the homepage.</a><br />
+        <h1>Sign Up</h1>
+        <p>Thank you for registering!</p>
+        <p><a href="{% url 'WhenInRome:login' %}">Login</a></p>
     {% else %}
+        <h1>Sign Up</h1>
+
         <form id="user_form" method="post" action="{% url 'WhenInRome:register' %}" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ user_form.as_p }}
-            {{ profile_form.as_p }}
-            <input type="submit" name="submit" value="Register" class="btn btn-primary">
+
+            <p>
+                <label for="{{ user_form.username.id_for_label }}">Username</label><br>
+                {{ user_form.username }}
+            </p>
+
+            <p>
+                <label for="{{ user_form.password.id_for_label }}">Password</label><br>
+                {{ user_form.password }}
+            </p>
+
+            <p>
+                <label for="{{ user_form.email.id_for_label }}">Email</label><br>
+                {{ user_form.email }}
+            </p>
+
+            <input type="submit" name="submit" value="Sign Up">
         </form>
+
+        <p>Already have an account?</p>
+        <p><a href="{% url 'WhenInRome:login' %}">Login</a></p>
     {% endif %}
 </div>
 {% endblock %}
