@@ -15,7 +15,7 @@ class City(models.Model):
         super(City, self).save(*args, **kwargs)
 
     class Meta:
-        verbose_name_plural = 'Categories'
+        verbose_name_plural = 'Cities'
 
     def __str__(self):
         return self.name
@@ -35,12 +35,21 @@ class Recommendation(models.Model):
 
     def __str__(self):
         return self.title
+    
+    @property
+    def upvote_count(self):
+        return self.upvote_set.count()
 
-#model to store user profiles, including bio and profile picture
+#model to store user profiles, including bio, profile picture, and followers and each follower is a normal Django User.
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(blank=True)
     picture = models.ImageField(upload_to='profile_images', blank=True)
+    followers = models.ManyToManyField(
+        User,
+        blank=True,
+        related_name='following_profiles'
+    )
 
     def __str__(self):
         return self.user.username

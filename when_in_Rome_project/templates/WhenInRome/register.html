@@ -1,19 +1,35 @@
-{% extends 'WhenInRome/base.html' %}
+<!DOCTYPE html>
+{% load static %}
 
-{% block content %}
-<div class="container py-4">
-    <h1>Register for When In Rome</h1>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>When In Rome</title>
+        <link rel="stylesheet" href="{% static 'css/style.css' %}?v=2">
+    </head>
+<body class="login-page">
 
-    {% if registered %}
-        <strong>Thank you for registering!</strong>
-        <a href="{% url 'WhenInRome:index' %}">Return to the homepage.</a><br />
-    {% else %}
-        <form id="user_form" method="post" action="{% url 'WhenInRome:register' %}" enctype="multipart/form-data">
+    <img src="/static/images/pisaSticker.png" class="stamp pisa" alt="leaning tower of pisa in passport stamp style">
+    <img src="/static/images/romeSticker.png" class="stamp vatican" alt="Vatican in passport stamp style">
+    <img src="/static/images/colosseumSticker.png" class=" stamp colosseum" alt="colosseum in passport stamp style">
+
+    <div class="login-container">
+        <h1>Sign Up</h1>
+
+        <form method="POST">
             {% csrf_token %}
-            {{ user_form.as_p }}
-            {{ profile_form.as_p }}
-            <input type="submit" name="submit" value="Register" class="btn btn-primary">
+            
+            <input type="text" name="username" placeholder="Choose a username">
+            <input type="password" name="password" placeholder="Choose a password">
+            <input type="email" name="email" placeholder="Enter your email (optional)">
+
+            <button type="submit">Sign Up</button>
         </form>
-    {% endif %}
-</div>
-{% endblock %}
+
+        <p>Already have an account?</p>
+        <a href="{% url 'WhenInRome:login' %}">Login</a>
+    </div>
+
+</body>
+</html>
