@@ -9,6 +9,7 @@ from WhenInRome.models import City, Recommendation, UserProfile,Review,Upvote
 from WhenInRome.forms import UserForm, UserProfileForm, RecommendationForm, CityForm
 from django.urls import reverse
 from django.db.models import Count
+from django.http import JsonResponse
 
 def index(request):
     context_dict = {}
@@ -201,3 +202,29 @@ def visitor_cookie_handler(request):
         request.session['last_visit'] = last_visit_cookie
     request.session['visits'] = visits
 
+@login_required
+def recommendation_upvotes(request, recommendation_id):
+    #Checks if request is POST
+    if request.method == 'POST':
+        recommendation = get_object_or_404(Recommendation, id=recommendation_id)
+        user = request.user
+
+        #Check if user already upvoted this recommendation
+        existing_upvote = Upvote.objects.filter(user=user, recommendation=recommendation).first()
+
+        #If upvoted remove it
+        if existing_upvote:
+            existing_upvote.delete()
+            return JsonResponse({
+                "Result": "Removed",
+                "Upvotes": recommendation.upvote_count
+            })
+        else:
+        #If not upvoted create new upvote
+            Upvote.objects.create(user=user, recommendation=recommendation)
+            return JsonResponse({
+                "Result": "Added",
+                "Upvotes": recommendation.upvote_count
+            })
+    #If not POST return error
+    return JsonResponse({"Result": "Error"}, status=400)
