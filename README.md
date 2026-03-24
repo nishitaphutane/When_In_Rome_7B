@@ -7,7 +7,6 @@ To run tests use command "python manage.py test WhenInRome"
 
 ### Clone the repository
 fork and then git clone the repo url
-cd when_in_Rome_project
 
 ### Install dependencies
 pip install -r requirements.txt
