@@ -1,3 +1,22 @@
 # When_In_Rome_7B
 
-# To run tests use command "python manage.py test WhenInRome"
+# Tests
+To run tests use command "python manage.py test WhenInRome"
+
+## Setup
+
+### Clone the repository
+fork and then git clone the repo url
+cd when_in_Rome_project
+
+### Install dependencies
+pip install -r requirements.txt
+
+### Run migrations
+python manage.py migrate
+
+### Populate the database
+python populate_wir.py
+
+### Run the server
+python manage.py runserver
