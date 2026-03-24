@@ -20,8 +20,6 @@ def about(request):
     context_dict = {}
     print(request.method)
     print(request.user)
-    visitor_cookie_handler(request)
-    context_dict['visits'] = request.session['visits']
     response = render(request, 'wheninrome/about.html', context = context_dict)
     return response
 
@@ -35,7 +33,7 @@ def show_category(request, category_name_slug):
     except City.DoesNotExist:
         context_dict['category'] = None
         context_dict['pages'] = None
-    return render(request, 'wheninrome/index.html', context=context_dict)
+    return render(request, 'wheninrome/category.html', context=context_dict)
 
 @login_required
 def add_category(request):

@@ -1,32 +1,34 @@
-{% extends 'WhenInRome/base.html' %}
+<!DOCTYPE html>
+{% load static %}
 
-{% block content %}
-<div>
-    <p>
-        <a href="{% url 'WhenInRome:index' %}">Home</a> &gt; Login
-    </p>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>When In Rome</title>
+        <link rel="stylesheet" href="{% static 'css/style.css' %}?v=2">
+    </head>
+<body class="login-page">
 
-    <center>
+    <img src="/static/images/pisaSticker.png" class="stamp pisa" alt="leaning tower of pisa in passport stamp style">
+    <img src="/static/images/romeSticker.png" class="stamp vatican" alt="Vatican in passport stamp style">
+    <img src="/static/images/colosseumSticker.png" class=" stamp colosseum" alt="colosseum in passport stamp style">
+
+    <div class="login-container">
         <h1>Login</h1>
 
-        <form id="login_form" method="post" action="{% url 'WhenInRome:login' %}">
+        <form method="POST">
             {% csrf_token %}
+            
+            <input type="text" name="username" placeholder="Username">
+            <input type="password" name="password" placeholder="Password">
 
-            <p>
-                <label for="id_username">Username</label><br>
-                <input type="text" name="username" id="id_username" placeholder="Enter your username">
-            </p>
-
-            <p>
-                <label for="id_password">Password</label><br>
-                <input type="password" name="password" id="id_password" placeholder="Enter your password">
-            </p>
-
-            <input type="submit" value="Login">
+            <button type="submit">Login</button>
         </form>
 
-        <p>Don’t have an account?</p>
-        <p><a href="{% url 'WhenInRome:register' %}">Sign Up</a></p>
-    </center>
-</div>
-{% endblock %}
+        <p>Don't have an account?</p>
+        <a href="{% url 'WhenInRome:register' %}">Sign Up</a>
+    </div>
+
+</body>
+</html>
