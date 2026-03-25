@@ -1,0 +1,85 @@
+{% extends 'WhenInRome/base.html'%}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    {% if category %}
+        <h2 class="results-title mb-2">
+            {% if "Landmarks" in category.slug %}
+                {{ category.name }} ⚲
+            {% elif "Food" in category.slug %}
+                {{ category.name }} 𐂐◯𓇋 
+            {% elif "Transportation" in category.slug %}
+                {{ category.name }} 🗺️⁀જ✈︎
+            {% else %}
+                {{ category.name }} ✨
+            {% endif %} 
+        </h2>
+        <p class="text-muted mb-4">Discover the best places in {{ category.name }}.</p>
+
+        <div class="row g-3">
+            {% if pages %}
+                {% for page in pages %}
+                    <div class="col-12">
+                        <div class="card shadow-sm border-0 p-3 mb-2 list-item-hover overflow-hidden">
+                            <div class="d-flex align-items-center">
+                                <div class="page-image-container" style="width: 150px; height: 110px; flex-shrink: 0;">
+                                    {% if page.image %}
+                                        <img src="{{ page.image.url }}" class="w-100 h-100" style="object-fit: cover;" alt="{{ page.title }}">
+                                    {% else %}
+                                        <div class="w-100 h-100 bg-light d-flex align-items-center justify-content-center">
+                                            <span class="fs-2">📸</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="p-3 flex-grow-1">
+                                    <h5 class="mb-1">
+                                        <a href="{{ page.url }}" class="text-decoration-none text-dark fw-bold" target="_blank" rel="noopener noreferrer">
+                                            {{ page.title }}
+                                        </a>
+                                    </h5>
+                                    <p class="text-muted small mb-0">
+                                        <span class="me-1">📍</span>
+                                            {% if page.location %} {{ page.location }} {% else %} Glasgow, Scotland {% endif %}
+                                    </p>
+                                </div>
+                                <div class="pe-4 text-muted">
+                                    <span class="fs-5">→</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <p class="alert alert-warning"> No places added to this category yet</p>
+                </div>
+            {% endif %}
+        </div>
+    {% else %}
+            <div class="alert alert-danger">
+                The requested category does not exist.
+            </div>
+        {% endif %}
+        <a href="{% url 'WhenInRome:index' %}" class="btn btn-outline-secondary rounded-pill mt-4">← Back to Home</a>
+    </div><style>
+            .results-title {
+                color: #3a2e00;
+                letter-spacing: -1px;
+            }
+            .list-item-hover {
+                transition: all 0.3s ease;
+                border-radius: 12px;
+            }
+            .list-item-hover:hover {
+                transform: translateX(8px);
+                background-color: #fffdf7;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.08) !important;
+            }
+            .list-item-hover:hover a {
+                color: #e6c200 !important;
+            }
+        </style>
+{% endblock %}
+
+

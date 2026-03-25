@@ -24,6 +24,9 @@ class Page(models.Model):
     url = models.URLField()
     views = models.IntegerField(default=0)
 
+    image = models.ImageField(upload_to='page_images', blank=True)
+    location = models.CharField(max_length=255, blank=True)
+
     def __str__(self):
         return self.title    
     

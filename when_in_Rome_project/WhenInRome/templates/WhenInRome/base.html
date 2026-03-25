@@ -1,5 +1,5 @@
 {% load static %}
-<! DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -13,7 +13,7 @@
     <section class="hero-section">
         <nav class="navbar navbar-expand-lg navbar-dark pt-3">
             <div class="container">
-                <a class="navbar-brand logo-cursive" href="{% url 'index' %}" > When In Rome</a>
+                <a class="navbar-brand logo-cursive" href="{% url 'WhenInRome:index' %}" > When In Rome</a>
                 <div class="ms-auto">
                     <a class="btn btn-outline-light me-2 rounded-pill" href="#">Sign Up</a>
                 </div>
@@ -21,9 +21,11 @@
             </div>
         </nav>
         <div class="hero-search-container">
-            <form action="{% url 'index' %}" method="get" class="search-box-wrapper shadow-lg">
-                <input name="q" type="text" class="form-control hero-search-input" placeholder="Where do you want to go?">
-                <button type="submit" class="btn btn-search">Search</button>
+            <form action="{% url 'WhenInRome:index' %}" method="get" class="search-box-wrapper shadow-lg overflow-hidden rounded-pill bg-white p-1">
+                <div class="input-group">
+                    <input name="q" type="text" class="form-control hero-search-input border-0 shadow-none ps-4" placeholder="Where do you want to go?">
+                    <button type="submit" class="btn btn-search rounded-pill px-4">Search</button>
+                </div>
             </form>
         </div>
     </section>
