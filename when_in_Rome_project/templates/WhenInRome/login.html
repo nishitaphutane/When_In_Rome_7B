@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>When In Rome</title>
+        <link rel="stylesheet" href="{% static 'css/style.css' %}?v=2">
+    </head>
+<body class="login-page">
+
+    <img src="/static/images/pisaSticker.png" class="stamp pisa" alt="leaning tower of pisa in passport stamp style">
+    <img src="/static/images/romeSticker.png" class="stamp vatican" alt="Vatican in passport stamp style">
+    <img src="/static/images/colosseumSticker.png" class=" stamp colosseum" alt="colosseum in passport stamp style">
+
+    <div class="login-container">
+        <h1>Login</h1>
+
+        <form method="POST">
+            {% csrf_token %}
+            
+            <input type="text" name="username" placeholder="Username">
+            <input type="password" name="password" placeholder="Password">
+
+            <button type="submit">Login</button>
+        </form>
+
+        <p>Don't have an account?</p>
+        <a href="{% url 'WhenInRome:register' %}">Sign Up</a>
+    </div>
+
+</body>
+</html>
