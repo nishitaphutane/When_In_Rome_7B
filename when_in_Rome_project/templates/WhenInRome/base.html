@@ -1,55 +1,40 @@
+<!DOCTYPE html>
+
 {% load static %}
-<!DOCTYPE html>>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>When In Rome</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=2">
 </head>
-<body class="beige-bg">
 
-    <section class="hero-section">
-        <nav class="navbar navbar-expand-lg navbar-dark pt-3">
-            <div class="container">
-                <a class="navbar-brand logo-cursive" href="{% url 'index' %}" > When In Rome</a>
-                <div class="ms-auto">
-                    <a class="btn btn-outline-light me-2 rounded-pill" href="#">Sign Up</a>
+<body class="body">
+
+    <div class="right-content">
+                <div class="auth-search">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'WhenInRome:profile' user.username %}" style="display:inline-flex; align-items:center;">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                            style="width:28px; height:28px; background:#7f9cab; border-radius:50%; padding:8px;">
+                            <circle cx="12" cy="8" r="4" fill="white" />
+                            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white" />
+                        </svg>
+                    </a>
+                            <a class="call-to-action" href="{% url 'WhenInRome:logout' %}">Logout</a>
+                        {% else %}
+                            <a class="call-to-action" href="{% url 'WhenInRome:register' %}">Sign Up</a>
+                            <a class="call-to-action" href="{% url 'WhenInRome:login' %}">Login</a>
+                        {% endif %}
                 </div>
-                <a class="btn btn-light rounded-pill" href="#">Login</a>
-            </div>
-        </nav>
-        <div class="hero-search-container">
-            <form action="{% url 'index' %}" method="get" class="search-box-wrapper shadow-lg">
-                <input name="q" type="text" class="form-control hero-search-input" placeholder="Where do you want to go?">
-                <button type="submit" class="btn btn-search">Search</button>
-            </form>
-        </div>
-    </section>
-    <div class="container mt-5">
-        <div class="row">
-            <aside class="col-lg-3 pe-lg-5">
-                <div class="sort-container mb-4">
-                    <select class="form-select sort-box shadow-sm">
-                        <option selected>Sort By </option>
-                        <option value="1">Highest Rating</option>
-                        <option value="2">Most Recent</option>
-                    </select>
-                </div>
-                <div class="filter-results">
-                    <h5 class="fw-bold mb-3"> Filter Results</h5>
-                    <div class="filter-item border-bottom py-3 d-flex justify-content-between">
-                        <span>Country</span> <span class="plus-icon">+</span>
-                    </div>
-                </div>
-            </aside>
-            <section class="col-lg-9">
-                {% block content %}
-                {% endblock %}
-            </section>
-        </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+                    <form class="search-box-wrapper">
+                        <input type="text" placeholder="Where will you go?">
+                        <button class="btn btn-search">Search</button>
+                    </form>
+                    <a id=about href="{% url 'WhenInRome:about' %}">About</a>
+    </div>    
+
+    {% block content %}{% endblock %}
 </body>
 </html>

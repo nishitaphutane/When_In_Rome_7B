@@ -3,6 +3,7 @@
 {% block content %}
 <div class="container py-4">
 <<<<<<< HEAD
+<<<<<<< HEAD
     <h1>{{ selected_user.username }}'s Profile</h1>
 
     {% if user_profile.picture %}
@@ -25,13 +26,58 @@
     {% endif %}
 =======
     <h1>{{ user.username }}'s Profile</h1>
+=======
+    <h1>{{ selected_user.username }}'s Profile</h1>
+>>>>>>> origin/main
 
     {% if user_profile.picture %}
-        <img src="{{ user_profile.picture.url }}" alt="{{ user.username }}" width="200">
+    <img src="{{ user_profile.picture.url }}" alt="{{ selected_user.username }}" width="200"
+        style="border-radius: 50%;">
+    {% else %}
+    <img src="https://ui-avatars.com/api/?name={{ selected_user.username }}&size=200&background=random"
+        alt="{{ selected_user.username }}" width="200" style="border-radius: 50%;">
     {% endif %}
 
-    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Email:</strong> {{ selected_user.email }}</p>
     <p><strong>Bio:</strong> {{ user_profile.bio }}</p>
+<<<<<<< HEAD
 >>>>>>> cd35048a0771d41e4b0f53d8ff2eae4414a5ab14
+=======
+    <p><strong>Member since:</strong> {{ selected_user.date_joined|date:"F d, Y" }}</p>
+    <p><strong>Followers:</strong> {{ follower_count }} &nbsp; <strong>Following:</strong> {{ following_count }}</p>
+
+    {% if user.username != selected_user.username %}
+    <form method="post" action="{% url 'WhenInRome:follow_user' selected_user.username %}">
+        {% csrf_token %}
+        {% if is_following %}
+        <button type="submit" class="btn btn-danger">Unfollow</button>
+        {% else %}
+        <button type="submit" class="btn btn-primary">Follow</button>
+        {% endif %}
+    </form>
+    {% endif %}
+
+    {% if recommendations %}
+    <h3>Recommends:</h3>
+    <ul>
+        {% for rec in recommendations %}
+        <li>{{ rec.title }} — {{ rec.city }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if reviews %}
+    <h3>Reviews:</h3>
+    <ul>
+        {% for review in reviews %}
+        <li>
+            <strong>{{ review.recommendation.title }}</strong> —
+            Rating: {{ review.rating }}/5
+            {% if review.comment %}<br><em>"{{ review.comment }}"</em>{% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+>>>>>>> origin/main
 </div>
 {% endblock %}

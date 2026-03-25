@@ -201,3 +201,66 @@ def visitor_cookie_handler(request):
         request.session['last_visit'] = last_visit_cookie
     request.session['visits'] = visits
 
+@login_required
+def recommendation_upvotes(request, recommendation_id):
+    #Checks if request is POST
+    if request.method == 'POST':
+        recommendation = get_object_or_404(Recommendation, id=recommendation_id)
+        user = request.user
+
+        #Check if user already upvoted this recommendation
+        existing_upvote = Upvote.objects.filter(user=user, recommendation=recommendation).first()
+
+        #If upvoted remove it
+        if existing_upvote:
+            existing_upvote.delete()
+            return JsonResponse({
+                "Result": "Removed",
+                "Upvotes": recommendation.upvote_count
+            })
+        else:
+        #If not upvoted create new upvote
+            Upvote.objects.create(user=user, recommendation=recommendation)
+            return JsonResponse({
+                "Result": "Added",
+                "Upvotes": recommendation.upvote_count
+            })
+    #If not POST return error
+    return JsonResponse({"Result": "Error"}, status=400)
+
+@login_required
+def add_review(request, recommendation_id):
+    recommendation = get_object_or_404(Recommendation, id=recommendation_id)
+
+    # GET → show page
+    if request.method == 'GET':
+        form = ReviewForm()
+        return render(request, 'WhenInRome/add_review.html', {
+            'form': form,
+            'recommendation': recommendation
+        })
+
+    # POST → return JSON
+    if request.method == 'POST':
+
+        if Review.objects.filter(user=request.user, recommendation=recommendation).exists():
+            return JsonResponse({"error": "You have already reviewed this recommendation."}, status=400)
+
+        form = ReviewForm(request.POST)
+
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.recommendation = recommendation
+            review.user = request.user
+            review.save()
+
+            return JsonResponse({
+                "success": True,
+                "review": {
+                    "username": request.user.username,
+                    "rating": review.rating,
+                    "comment": review.comment,
+                }
+            }, status=201)
+
+        return JsonResponse({"error": "Invalid data.", "fields": form.errors}, status=400)
