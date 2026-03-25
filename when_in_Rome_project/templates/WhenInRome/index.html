@@ -2,6 +2,16 @@
 {% load static %}
 
 {% block content %}
+
+<section class="hero-section">
+    <div class="center-content">
+        <h1 class="title" href="{% url 'WhenInRome:index' %}">When in Rome</h1>
+        <img src="/static/images/homepagePassportStamp.jpg" alt="collage of passport stamps" width="337.4"
+            height="453.3">
+        <h1 class="title"> do as the Romans do</a>
+    </div>
+</section>
+
 <h2 class="results-title mb-4">Search Results</h2>
 <div class="row g-4">
     {% if categories %}
