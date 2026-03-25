@@ -21,10 +21,15 @@ class City(models.Model):
     def __str__(self):
         return self.name
 
+<<<<<<< HEAD
 #model for recommendations to visit places 
 class Recommendation(models.Model):
     city = models.ForeignKey(City, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+=======
+class Page(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+>>>>>>> cd35048a0771d41e4b0f53d8ff2eae4414a5ab14
     title = models.CharField(max_length=128)
     description = models.TextField(blank=True)
     location = models.CharField(max_length=256, blank=True)
@@ -39,6 +44,7 @@ class Recommendation(models.Model):
     image = models.ImageField(upload_to='page_images', blank=True)
 
     def __str__(self):
+<<<<<<< HEAD
         return self.title
     
     @property
@@ -46,6 +52,10 @@ class Recommendation(models.Model):
         return self.upvote_set.count()
 
 #model to store user profiles, including bio, profile picture, and followers and each follower is a normal Django User.
+=======
+        return self.title    
+
+>>>>>>> cd35048a0771d41e4b0f53d8ff2eae4414a5ab14
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(blank=True)

@@ -2,6 +2,7 @@
 
 {% block content %}
 <div class="container py-4">
+<<<<<<< HEAD
     <h1>{{ selected_user.username }}'s Profile</h1>
 
     {% if user_profile.picture %}
@@ -22,5 +23,15 @@
             {% endif %}
         </form>
     {% endif %}
+=======
+    <h1>{{ user.username }}'s Profile</h1>
+
+    {% if user_profile.picture %}
+        <img src="{{ user_profile.picture.url }}" alt="{{ user.username }}" width="200">
+    {% endif %}
+
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Bio:</strong> {{ user_profile.bio }}</p>
+>>>>>>> cd35048a0771d41e4b0f53d8ff2eae4414a5ab14
 </div>
 {% endblock %}
