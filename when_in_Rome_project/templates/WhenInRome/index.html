@@ -3,29 +3,29 @@
 
 {% block content %}
 <div class="container mt-5">
-
     <div class="text-center mb-4">
-        <h1 class="display-4 fw-bold">Explore Scotland</h1>
+        <h2 class="display-4 fw-bold">Explore Scotland</h2>
         <p class="text-muted"> Scotland's most vibrant city - discover it by category</p>
     </div>
+
     <div class="glasgow-intro mb-4">
-            <div class="glasgow-intro-text">
-                <span class="glasgow-tag">🏙️ Glasgow, Scotland</span>
-                <p>
-                    Scotland's largest city and cultural powerhouse...Glasgow is famous for its
+        <div class="glasgow-intro-text">
+            <span class="glasgow-tag">🏙️ Glasgow, Scotland</span>
+            <p>
+                Scotland's largest city and cultural powerhouse...Glasgow is famous for its
                 world-class museums, buzzing food scene, Victorian architecture, and some of
                 the font-friendliest locals you'll ever meet. Whether you're after hidden street-art
                 lanes in the West End or a classic pie and a pint in the East End, there's
                 always something new to discover.
-                </p>
-                <div class="glasgow-intro-facts">
-                    <span>🌧️ Mild &amp; rainy year-round</span>
-                    <span>🚇 Clockwork Orange underground</span>
-                    <span>🆓 Most museums are free entry</span>
-                    <span>🎨 Street art capital of Scotland</span>
-                </div>
+            </p>
+            <div class="glasgow-intro-facts">
+                <span>🌧️ Mild &amp; rainy year-round</span>
+                <span>🚇 Clockwork Orange underground</span>
+                <span>🆓 Most museums are free entry</span>
+                <span>🎨 Street art capital of Scotland</span>
             </div>
         </div>
+    </div>
 
     <div class="filter-bar mb-4">
         <div class="filter-chip-container">
@@ -38,36 +38,36 @@
         </div>
     </div>
             
-        <div class="category-grid mb-5">
-            {% if categories %}
-                {% for city in categories %}
-                     <a href="{% url 'WhenInRome:show_category' city.slug %}" class="text-decoration-none text-dark">
-                        <div class="stamp-card shadow-lg border-0 transition-hover">
-                            <div class="position-relative overflow-hidden" style="border-radius: 15px 15px 0 0;">
-                                <img src="{% if city.image %}{{ city.image.url }}{% else %}{% static 'images/placeholder.jpg' %}{% endif %}"
-                                    class="img-fluid w-100 card-img"
-                                    style="height: 300px; object-fit:cover;"
-                                    alt="{{ city.name }}">
-                            </div>
+    <div class="category-grid mb-5">
+        {% if categories %}
+            {% for city in categories %}
+                <a href="{% url 'WhenInRome:show_category' city.slug %}" class="text-decoration-none text-dark">
+                    <div class="stamp-card shadow-lg border-0 transition-hover">
+                        <div class="position-relative overflow-hidden" style="border-radius: 15px 15px 0 0;">
+                            <img src="{% if city.image %}{{ city.image.url }}{% else %}{% static 'images/placeholder.jpg' %}{% endif %}"
+                                class="img-fluid w-100 card-img"
+                                style="height: 300px; object-fit:cover;"
+                                alt="{{ city.name }}">
+                        </div>
 
-                            <div class="p-3 bg-white d-flex justify-content-between align-items-center" style="border-radius: 0 0 15px 15px;">
-                                <div>
-                                    <h3 class="fw-bold mb-1">{{ city.name }}</h3>
-                                    <p class="text-muted mb-0">{{ city.country }}</p>
-                                </div>
-                                <div class="upvote-circle d-flex align-items-center justify-content-center">
-                                    <span class="fs-4">↑</span>
-                                </div>
+                        <div class="p-3 bg-white d-flex justify-content-between align-items-center" style="border-radius: 0 0 15px 15px;">
+                            <div>
+                                <h3 class="fw-bold mb-1">{{ city.name }}</h3>
+                                <p class="text-muted mb-0">{{ city.country }}</p>
+                            </div>
+                            <div class="upvote-circle d-flex align-items-center justify-content-center">
+                                <span class="fs-4">↑</span>
                             </div>
                         </div>
-                    </a>
-                {% endfor %}
-            {% else %}
-                <div class="alert alert-info" style="grid-column: 1 / -1;">
-                    No categories found. Start by populating your database
-                </div>
-            {% endif %}
-        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-info" style="grid-column: 1 / -1;">
+                No categories found. Start by populating your database
+            </div>
+        {% endif %}
+    </div>
 
         
         <div class="glance-strip mt-3 mb-5">
@@ -221,15 +221,14 @@
         }
         .glance-card { display: flex; gap: 14px; }
         .glance-icon { font-size: 1.8rem; }
-    </style>
+</style>
 
-    <script>
-        document.querySelectorAll('.filter-chip').forEach(chip =>{
-            chip.addEventListener('click', () => {
-                document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+<script>
+    document.querySelectorAll('.filter-chip').forEach(chip =>{
+        chip.addEventListener('click', () => {
+            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
             chip.classList.add('active');
-            });
         });
-    </script>
-
+    });
+</script>
 {% endblock %}
