@@ -1,7 +1,11 @@
 from django import forms
 from django.contrib.auth.models import User
 from WhenInRome.models import UserProfile
+<<<<<<< HEAD
+from WhenInRome.models import Recommendation, City
+=======
 from WhenInRome.models import Recommendation, City, Review
+>>>>>>> origin/main
 
 class UserForm(forms.ModelForm):
     username = forms.CharField(
@@ -66,6 +70,9 @@ class CityForm(forms.ModelForm):
 
     class Meta:
         model = City
+<<<<<<< HEAD
+        fields = ('name',)
+=======
         fields = ('name',)
 
 class ReviewForm(forms.ModelForm):
@@ -83,3 +90,4 @@ class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
         fields = ('rating', 'comment')
+>>>>>>> origin/main
