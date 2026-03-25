@@ -36,8 +36,6 @@ class Recommendation(models.Model):
         self.slug = slugify(self.title)
         super(Recommendation, self).save(*args, **kwargs)
 
-    image = models.ImageField(upload_to='page_images', blank=True)
-
     def __str__(self):
         return self.title
     
