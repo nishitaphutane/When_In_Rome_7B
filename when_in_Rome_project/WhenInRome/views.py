@@ -9,6 +9,7 @@ from WhenInRome.models import City, Recommendation, UserProfile,Review,Upvote
 from WhenInRome.forms import UserForm, UserProfileForm, RecommendationForm, CityForm
 from django.urls import reverse
 from django.db.models import Count
+from django.contrib.auth.models import User
 
 def index(request):
     context_dict = {}
@@ -142,18 +143,21 @@ def profile(request, username):
     selected_user = get_object_or_404(User, username=username)
     user_profile, created = UserProfile.objects.get_or_create(user=selected_user)
 
-    is_following = False
-    if request.user in user_profile.followers.all():
-        is_following = True
+    is_following = request.user in user_profile.followers.all()
+    follower_count = user_profile.followers.count()
+    following_count = UserProfile.objects.filter(followers=selected_user).count()
+    recommendations = Recommendation.objects.filter(user=selected_user)[:4]
+    reviews = Review.objects.filter(user=selected_user)
 
-    context_dict = {
+    return render(request, 'WhenInRome/profile.html', {
         'selected_user': selected_user,
         'user_profile': user_profile,
         'is_following': is_following,
-        'follower_count': user_profile.followers.count(),
-    }
-
-    return render(request, 'WhenInRome/profile.html', context=context_dict)
+        'follower_count': follower_count,
+        'following_count': following_count,
+        'recommendations': recommendations,
+        'reviews': reviews,
+    })
 
 @login_required
 def follow_user(request, username):
