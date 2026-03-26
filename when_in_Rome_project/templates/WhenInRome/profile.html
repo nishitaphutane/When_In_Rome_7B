@@ -272,8 +272,14 @@
             {% for review in reviews %}
             <div class="profile-card">
                 <div class="profile-card-img-wrap">
+                    {% if review.recommendation.image %}
+                    <img src="{{ review.recommendation.image.url }}" alt="{{ review.recommendation.title }}" class="profile-card-img">
+                    {% elif review.recommendation.image_name %}
+                    <img src="{% static 'images/'|add:review.recommendation.image_name %}" alt="{{ review.recommendation.title }}" class="profile-card-img">
+                    {% else %}
                     <img src="https://ui-avatars.com/api/?name={{ review.recommendation.title|urlencode }}&size=150&background=c4a882&color=fff"
                         alt="{{ review.recommendation.title }}" class="profile-card-img">
+                    {% endif %}
                 </div>
                 <p class="profile-card-label">{{ review.recommendation.title }}</p>
                 {% if review.comment %}
