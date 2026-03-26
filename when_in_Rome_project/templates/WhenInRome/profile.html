@@ -91,39 +91,112 @@
                 </form>
                 {% endif %}
 
-                {% if user_profile.bio or user_profile.pronouns %}
+                <!-- ABOUT -->
                 <div class="profile-section">
-                    <h3 class="profile-section-title">About</h3>
-                    {% if user_profile.pronouns %}<p class="profile-section-text">Pronouns: {{ user_profile.pronouns }}
-                    </p>{% endif %}
-                </div>
-                {% endif %}
-
-                {% if user_profile.city or user_profile.country %}
-                <div class="profile-section">
-                    <h3 class="profile-section-title">Info</h3>
-                    <p class="profile-section-text">
-                        {% if user_profile.city and user_profile.country %}
-                        🏙 {{ user_profile.city }}, {{ user_profile.country }}
-                        {% elif user_profile.city %}
-                        🏙 {{ user_profile.city }}
-                        {% else %}
-                        🌍 {{ user_profile.country }}
+                    <h3 class="profile-section-title">
+                        About
+                        {% if user.username == selected_user.username %}
+                        <span class="edit-icon" onclick="toggleEdit('about-section')" title="Edit">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="13" height="13">
+                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-8.793 8.793-3.414.586.586-3.414 8.793-8.793z"/>
+                            </svg>
+                        </span>
                         {% endif %}
-                    </p>
+                    </h3>
+                    <div id="about-section-view">
+                        {% if user_profile.pronouns %}
+                        <p class="profile-section-text">Pronouns: {{ user_profile.pronouns }}</p>
+                        {% else %}
+                        <p class="profile-section-text" style="color:#aaa;">—</p>
+                        {% endif %}
+                    </div>
+                    {% if user.username == selected_user.username %}
+                    <form id="about-section-edit" class="inline-edit-form" method="post" action="{% url 'WhenInRome:update_profile' %}">
+                        {% csrf_token %}
+                        <input type="text" name="pronouns" value="{{ user_profile.pronouns }}" placeholder="Pronouns" class="inline-edit-input">
+                        <div class="inline-edit-actions">
+                            <button type="submit" class="inline-save-btn">Save</button>
+                            <button type="button" class="inline-cancel-btn" onclick="toggleEdit('about-section')">Cancel</button>
+                        </div>
+                    </form>
+                    {% endif %}
                 </div>
-                {% endif %}
 
-                {% if selected_user.visited_cities.all %}
+                <!-- INFO -->
                 <div class="profile-section">
-                    <h3 class="profile-section-title">Visited</h3>
-                    {% for visited in selected_user.visited_cities.all %}
-                    <p class="profile-section-text">
-                        {% if visited.country_flag %}{{ visited.country_flag }}{% endif %} {{ visited.city_name }}
-                    </p>
-                    {% endfor %}
+                    <h3 class="profile-section-title">
+                        Info
+                        {% if user.username == selected_user.username %}
+                        <span class="edit-icon" onclick="toggleEdit('info-section')" title="Edit">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="13" height="13">
+                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-8.793 8.793-3.414.586.586-3.414 8.793-8.793z"/>
+                            </svg>
+                        </span>
+                        {% endif %}
+                    </h3>
+                    <div id="info-section-view">
+                        <p class="profile-section-text">
+                            {% if user_profile.city and user_profile.country %}
+                            🏙 {{ user_profile.city }}, {{ user_profile.country }}
+                            {% elif user_profile.city %}
+                            🏙 {{ user_profile.city }}
+                            {% elif user_profile.country %}
+                            🌍 {{ user_profile.country }}
+                            {% else %}
+                            <span style="color:#aaa;">—</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                    {% if user.username == selected_user.username %}
+                    <form id="info-section-edit" class="inline-edit-form" method="post" action="{% url 'WhenInRome:update_profile' %}">
+                        {% csrf_token %}
+                        <input type="text" name="city" value="{{ user_profile.city }}" placeholder="City" class="inline-edit-input">
+                        <input type="text" name="country" value="{{ user_profile.country }}" placeholder="Country" class="inline-edit-input">
+                        <div class="inline-edit-actions">
+                            <button type="submit" class="inline-save-btn">Save</button>
+                            <button type="button" class="inline-cancel-btn" onclick="toggleEdit('info-section')">Cancel</button>
+                        </div>
+                    </form>
+                    {% endif %}
                 </div>
-                {% endif %}
+
+                <!-- VISITED -->
+                <div class="profile-section">
+                    <h3 class="profile-section-title">
+                        Visited
+                        {% if user.username == selected_user.username %}
+                        <span class="edit-icon" onclick="toggleEdit('visited-section')" title="Edit">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="13" height="13">
+                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-8.793 8.793-3.414.586.586-3.414 8.793-8.793z"/>
+                            </svg>
+                        </span>
+                        {% endif %}
+                    </h3>
+                    <div id="visited-section-view">
+                        {% for visited in selected_user.visited_cities.all %}
+                        <p class="profile-section-text">
+                            {% if visited.country_flag %}{{ visited.country_flag }}{% endif %} {{ visited.city_name }}
+                        </p>
+                        {% empty %}
+                        <p class="profile-section-text" style="color:#aaa;">—</p>
+                        {% endfor %}
+                    </div>
+                    {% if user.username == selected_user.username %}
+                    <form id="visited-section-edit" class="inline-edit-form" method="post" action="{% url 'WhenInRome:update_visited' %}">
+                        {% csrf_token %}
+                        {% for visited in selected_user.visited_cities.all %}
+                        <input type="text" name="visited_city" value="{{ visited.city_name }}" placeholder="City" class="inline-edit-input">
+                        {% endfor %}
+                        <!-- blank input for adding a new city -->
+                        <input type="text" name="visited_city" value="" placeholder="+ Add a city" class="inline-edit-input">
+                        <div class="inline-edit-actions">
+                            <button type="submit" class="inline-save-btn">Save</button>
+                            <button type="button" class="inline-cancel-btn" onclick="toggleEdit('visited-section')">Cancel</button>
+                        </div>
+                    </form>
+                    {% endif %}
+                </div>
+
             </div>
         </div>
 
@@ -134,12 +207,6 @@
 
         <div class="profile-right-header">
             <h2 class="profile-right-title">Recommends:</h2>
-
-            {% if user.is_authenticated and user.username == selected_user.username %}
-            <a class="upload-rec-btn">
-                Upload a recommendation
-            </a>
-            {% endif %}
         </div>
 
         {% if recommendations %}
@@ -363,6 +430,21 @@
         font-size: 1rem;
         color: #211E20;
         margin: 0 0 4px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .edit-icon {
+        color: #aaa;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        transition: color 0.15s;
+    }
+
+    .edit-icon:hover {
+        color: #7f9cab;
     }
 
     .profile-section-text {
@@ -370,6 +452,61 @@
         font-size: 0.88rem;
         color: #211E20;
         margin: 2px 0;
+    }
+
+    .inline-edit-form {
+        display: none;
+        flex-direction: column;
+        gap: 6px;
+        margin-top: 6px;
+    }
+
+    .inline-edit-form.active {
+        display: flex;
+    }
+
+    .inline-edit-input {
+        font-family: 'garet', sans-serif;
+        font-size: 0.88rem;
+        color: #211E20;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid #aaa;
+        outline: none;
+        padding: 2px 0;
+        width: 100%;
+    }
+
+    .inline-edit-input:focus {
+        border-bottom-color: #7f9cab;
+    }
+
+    .inline-edit-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 4px;
+    }
+
+    .inline-save-btn {
+        font-family: 'garet', sans-serif;
+        font-size: 0.78rem;
+        padding: 4px 14px;
+        border-radius: 12px;
+        border: 1.5px solid #7f9cab;
+        background: #7f9cab;
+        color: white;
+        cursor: pointer;
+    }
+
+    .inline-cancel-btn {
+        font-family: 'garet', sans-serif;
+        font-size: 0.78rem;
+        padding: 4px 14px;
+        border-radius: 12px;
+        border: 1.5px solid #aaa;
+        background: transparent;
+        color: #555;
+        cursor: pointer;
     }
 
     .profile-right {
@@ -382,25 +519,6 @@
         justify-content: space-between;
         gap: 16px;
         margin-bottom: 16px;
-    }
-
-    .upload-rec-btn {
-        display: inline-block;
-        font-family: 'garet', sans-serif;
-        font-size: 0.88rem;
-        padding: 8px 18px;
-        border: 2px solid #5b5b5b;
-        border-radius: 10px;
-        background: #f7f7f7;
-        color: #333;
-        text-decoration: none;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.14);
-        transition: background 0.2s ease;
-        white-space: nowrap;
-    }
-
-    .upload-rec-btn:hover {
-        background: #ececec;
     }
 
     .profile-right-title {
@@ -461,5 +579,21 @@
         margin: 0;
     }
 </style>
+
+<script>
+    function toggleEdit(sectionId) {
+        const view = document.getElementById(sectionId + '-view');
+        const form = document.getElementById(sectionId + '-edit');
+        const isEditing = form.classList.contains('active');
+
+        if (isEditing) {
+            form.classList.remove('active');
+            view.style.display = '';
+        } else {
+            form.classList.add('active');
+            view.style.display = 'none';
+        }
+    }
+</script>
 
 {% endblock %}
