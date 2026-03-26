@@ -233,3 +233,40 @@ def recommendation_upvotes(request, recommendation_id):
             })
     #If not POST return error
     return JsonResponse({"Result": "Error"}, status=400)
+
+@login_required
+def add_review(request, recommendation_id):
+    recommendation = get_object_or_404(Recommendation, id=recommendation_id)
+
+    # GET → show page
+    if request.method == 'GET':
+        form = ReviewForm()
+        return render(request, 'WhenInRome/add_review.html', {
+            'form': form,
+            'recommendation': recommendation
+        })
+
+    # POST → return JSON
+    if request.method == 'POST':
+
+        if Review.objects.filter(user=request.user, recommendation=recommendation).exists():
+            return JsonResponse({"error": "You have already reviewed this recommendation."}, status=400)
+
+        form = ReviewForm(request.POST)
+
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.recommendation = recommendation
+            review.user = request.user
+            review.save()
+
+            return JsonResponse({
+                "success": True,
+                "review": {
+                    "username": request.user.username,
+                    "rating": review.rating,
+                    "comment": review.comment,
+                }
+            }, status=201)
+
+        return JsonResponse({"error": "Invalid data.", "fields": form.errors}, status=400)
