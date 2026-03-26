@@ -15,6 +15,7 @@
     <div class="right-content">
                 <div class="auth-search">
                     {% if user.is_authenticated %}
+                    <a class="call-to-action" href="#">Upload a recommendation</a>
                     <a href="{% url 'WhenInRome:profile' user.username %}" style="display:inline-flex; align-items:center;">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                             style="width:28px; height:28px; background:#7f9cab; border-radius:50%; padding:8px;">

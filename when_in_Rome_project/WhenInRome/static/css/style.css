@@ -272,3 +272,22 @@
     right: 60px;
     width: 220px;
 }
+
+.upload-rec-btn {
+    display: inline-block;
+    font-family: 'garet', sans-serif;
+    font-size: 0.88rem;
+    padding: 8px 18px;
+    border: 2px solid #5b5b5b;
+    border-radius: 10px;
+    background: #f7f7f7;
+    color: #333;
+    text-decoration: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.14);
+    transition: background 0.2s ease;
+    white-space: nowrap;
+}
+
+.upload-rec-btn:hover {
+    background: #ececec;
+}

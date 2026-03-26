@@ -1,14 +1,19 @@
 import datetime
+from django.db import models
 from django.shortcuts import render, redirect, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse
 from WhenInRome.models import City, Recommendation, UserProfile,Review,Upvote
-from WhenInRome.forms import UserForm, UserProfileForm, RecommendationForm, CityForm
+from WhenInRome.forms import UserForm, UserProfileForm, RecommendationForm, CityForm, ReviewForm
 from django.urls import reverse
 from django.db.models import Count
 from django.contrib.auth.models import User 
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
+
 
 def index(request):
     city_list = City.objects.annotate(total_upvotes=Count('recommendation__upvote')).order_by('-total_upvotes')[:5]
@@ -142,18 +147,21 @@ def profile(request, username):
     selected_user = get_object_or_404(User, username=username)
     user_profile, created = UserProfile.objects.get_or_create(user=selected_user)
 
-    is_following = False
-    if request.user in user_profile.followers.all():
-        is_following = True
+    is_following = request.user in user_profile.followers.all()
+    follower_count = user_profile.followers.count()
+    following_count = UserProfile.objects.filter(followers=selected_user).count()
+    recommendations = Recommendation.objects.filter(user=selected_user)[:4]
+    reviews = Review.objects.filter(user=selected_user)
 
-    context_dict = {
+    return render(request, 'WhenInRome/profile.html', {
         'selected_user': selected_user,
         'user_profile': user_profile,
         'is_following': is_following,
-        'follower_count': user_profile.followers.count(),
-    }
-
-    return render(request, 'WhenInRome/profile.html', context=context_dict)
+        'follower_count': follower_count,
+        'following_count': following_count,
+        'recommendations': recommendations,
+        'reviews': reviews,
+    })
 
 @login_required
 def follow_user(request, username):
@@ -228,6 +236,14 @@ def recommendation_upvotes(request, recommendation_id):
     #If not POST return error
     return JsonResponse({"Result": "Error"}, status=400)
 
+def view_reviews(request):
+    reviews = Review.objects.filter(recommendation=recommendation).order_by('-created_at')
+
+    return render(request, 'your_template.html', {
+        'recommendation': recommendation,
+        'reviews': reviews
+    })
+
 @login_required
 def add_review(request, recommendation_id):
     recommendation = get_object_or_404(Recommendation, id=recommendation_id)
@@ -265,4 +281,43 @@ def add_review(request, recommendation_id):
 
         return JsonResponse({"error": "Invalid data.", "fields": form.errors}, status=400)
 
-# Update
+@login_required
+def upload_picture(request):
+    if request.method == 'POST':
+        user_profile, created = UserProfile.objects.get_or_create(user=request.user)
+        profile_form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+
+        if profile_form.is_valid():
+            if 'picture' in request.FILES:
+                user_profile.picture = request.FILES['picture']
+            profile_form.save()
+            messages.success(request, 'Profile picture updated successfully.')
+        else:
+            messages.error(request, 'Failed to update profile picture.')
+
+    return redirect(reverse('WhenInRome:profile', kwargs={'username': request.user.username}))
+
+@login_required
+def update_profile(request):
+    if request.method == 'POST':
+        profile = request.user.userprofile
+        profile.pronouns = request.POST.get('pronouns', '').strip()
+        profile.city = request.POST.get('city', '').strip()
+        profile.country = request.POST.get('country', '').strip()
+        profile.save()
+    return redirect('WhenInRome:profile', username=request.user.username)
+
+
+@login_required
+def update_visited(request):
+    if request.method == 'POST':
+        cities = [c.strip() for c in request.POST.getlist('visited_city') if c.strip()]
+        
+        # Delete all existing and recreate from form
+        request.user.visited_cities.all().delete()
+        
+        for city_name in cities:
+            request.user.visited_cities.create(city_name=city_name)
+            
+    return redirect('WhenInRome:profile', username=request.user.username)
+
