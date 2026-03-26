@@ -2,8 +2,6 @@
 
 {% block content %}
 <div class="container py-4">
-<<<<<<< HEAD
-<<<<<<< HEAD
     <h1>{{ selected_user.username }}'s Profile</h1>
 
     {% if user_profile.picture %}
@@ -24,11 +22,8 @@
             {% endif %}
         </form>
     {% endif %}
-=======
     <h1>{{ user.username }}'s Profile</h1>
-=======
     <h1>{{ selected_user.username }}'s Profile</h1>
->>>>>>> origin/main
 
     {% if user_profile.picture %}
     <img src="{{ user_profile.picture.url }}" alt="{{ selected_user.username }}" width="200"
@@ -40,9 +35,6 @@
 
     <p><strong>Email:</strong> {{ selected_user.email }}</p>
     <p><strong>Bio:</strong> {{ user_profile.bio }}</p>
-<<<<<<< HEAD
->>>>>>> cd35048a0771d41e4b0f53d8ff2eae4414a5ab14
-=======
     <p><strong>Member since:</strong> {{ selected_user.date_joined|date:"F d, Y" }}</p>
     <p><strong>Followers:</strong> {{ follower_count }} &nbsp; <strong>Following:</strong> {{ following_count }}</p>
 
@@ -78,6 +70,5 @@
         {% endfor %}
     </ul>
     {% endif %}
->>>>>>> origin/main
 </div>
 {% endblock %}

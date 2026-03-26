@@ -1,11 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from WhenInRome.models import UserProfile
-<<<<<<< HEAD
 from WhenInRome.models import Recommendation, City
-=======
-from WhenInRome.models import Recommendation, City, Review
->>>>>>> origin/main
 
 class UserForm(forms.ModelForm):
     username = forms.CharField(
@@ -70,24 +66,4 @@ class CityForm(forms.ModelForm):
 
     class Meta:
         model = City
-<<<<<<< HEAD
         fields = ('name',)
-=======
-        fields = ('name',)
-
-class ReviewForm(forms.ModelForm):
-    rating = forms.IntegerField(
-        min_value=1,
-        max_value=5,
-        help_text="Rating must be between 1 and 5."
-    )
-    comment = forms.CharField(
-        required=False,
-        widget=forms.Textarea(attrs={'rows': 3}),
-        help_text="Leave an optional comment."
-    )
-
-    class Meta:
-        model = Review
-        fields = ('rating', 'comment')
->>>>>>> origin/main
