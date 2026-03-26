@@ -136,12 +136,6 @@
     z-index: 1;
 }
 
-.stamp {
-    position: absolute;
-    opacity: 0.8;
-    z-index: 1;
-}
-
 .pisa {
     rotate: 18.1deg;
     left: 40px;
@@ -161,4 +155,73 @@
     bottom: 40px;
     right: 60px;
     width: 220px;
+}
+
+.everything {
+    display: flex;
+    align-items: right;
+    justify-content: left;
+    gap: 40%;
+}
+
+.title {
+    color: #211E20;
+}
+
+.location-name {
+    font-family: 'black-mango';
+    font-weight: lighter;
+}
+
+.review-amount {
+    font-family: 'garet';
+    font-weight: lighter;
+}
+
+.star-data {
+    font-family: 'garet';
+    color: #211E20;
+}
+
+.sort-buttons { 
+  height: 200px;
+  position: relative;
+  font-family: 'garet';
+  color: #211E20;
+}
+
+.buttons {
+  display: flex;
+  margin-top: 20px;
+  background-color: white;
+  border-color: white;
+  border-radius: 16px;
+}
+
+.name {
+    font-family: 'black-mango';
+}
+
+.date {
+    font-family: 'garet';
+    color: #797277;
+    margin-top: -20px;
+}
+
+.rating {
+    margin-top: -20px;
+}
+
+.review {
+    font-family: 'garet';
+    color: #211E20;
+    margin-top: -20px;
+}
+
+.right-hand-side .buttons {
+    margin-top: 215px;
+}
+
+.right-hand-side{
+    margin-top: 200px;
 }
