@@ -234,6 +234,14 @@ def recommendation_upvotes(request, recommendation_id):
     #If not POST return error
     return JsonResponse({"Result": "Error"}, status=400)
 
+def view_reviews(request):
+    reviews = Review.objects.filter(recommendation=recommendation).order_by('-created_at')
+
+    return render(request, 'your_template.html', {
+        'recommendation': recommendation,
+        'reviews': reviews
+    })
+
 @login_required
 def add_review(request, recommendation_id):
     recommendation = get_object_or_404(Recommendation, id=recommendation_id)
