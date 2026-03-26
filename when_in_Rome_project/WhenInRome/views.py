@@ -264,3 +264,5 @@ def add_review(request, recommendation_id):
             }, status=201)
 
         return JsonResponse({"error": "Invalid data.", "fields": form.errors}, status=400)
+
+# Update
