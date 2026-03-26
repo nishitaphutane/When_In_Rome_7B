@@ -11,6 +11,9 @@ from django.urls import reverse
 from django.db.models import Count
 from django.contrib.auth.models import User 
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
+
 
 def index(request):
     city_list = City.objects.annotate(total_upvotes=Count('recommendation__upvote')).order_by('-total_upvotes')[:5]
@@ -293,4 +296,28 @@ def upload_picture(request):
             messages.error(request, 'Failed to update profile picture.')
 
     return redirect(reverse('WhenInRome:profile', kwargs={'username': request.user.username}))
+
+@login_required
+def update_profile(request):
+    if request.method == 'POST':
+        profile = request.user.userprofile
+        profile.pronouns = request.POST.get('pronouns', '').strip()
+        profile.city = request.POST.get('city', '').strip()
+        profile.country = request.POST.get('country', '').strip()
+        profile.save()
+    return redirect('WhenInRome:profile', username=request.user.username)
+
+
+@login_required
+def update_visited(request):
+    if request.method == 'POST':
+        cities = [c.strip() for c in request.POST.getlist('visited_city') if c.strip()]
+        
+        # Delete all existing and recreate from form
+        request.user.visited_cities.all().delete()
+        
+        for city_name in cities:
+            request.user.visited_cities.create(city_name=city_name)
+            
+    return redirect('WhenInRome:profile', username=request.user.username)
 
