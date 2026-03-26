@@ -157,71 +157,126 @@
     width: 220px;
 }
 
-.everything {
-    display: flex;
-    align-items: right;
-    justify-content: left;
-    gap: 40%;
-}
-
-.title {
-    color: #211E20;
+.container {
+    padding: 30px;
+    border-radius: 8px;
 }
 
 .location-name {
     font-family: 'black-mango';
-    font-weight: lighter;
+    color: #211E20;
+    font-size: 40px;
+    font-weight: 500;
 }
 
-.review-amount {
-    font-family: 'garet';
-    font-weight: lighter;
-}
-
-.star-data {
+.subtitle {
     font-family: 'garet';
     color: #211E20;
+    font-weight: lighter;
+    margin-top: -25px;
+    font-size: 30px;
 }
 
-.sort-buttons { 
-  height: 200px;
-  position: relative;
-  font-family: 'garet';
-  color: #211E20;
+.content {
+    display: flex;
+    gap: 40px;
 }
 
-.buttons {
-  display: flex;
-  margin-top: 20px;
-  background-color: white;
-  border-color: white;
-  border-radius: 16px;
+.sidebar {
+    width: 250px;
 }
 
-.name {
-    font-family: 'black-mango';
+.star-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
-.date {
+.star-row span {
+    width: 60px;
+}
+
+.bar {
+    height: 6px;
+    background-color: white;
+    flex: 1;
+    border-radius: 4px;
+}
+
+.buttons button {
     font-family: 'garet';
-    color: #797277;
-    margin-top: -20px;
+    width: 25%;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #211E20;
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+    display: block;
+    
 }
 
-.rating {
-    margin-top: -20px;
+.main {
+    flex: 1;
+    margin-left: 50%;
+    align-items: center;
 }
 
 .review {
+    margin-bottom: -75%;
+}
+
+.review-header {
+    display: block;
+    gap: 30px;
+}
+
+.username {
+    font-family: 'black-mango';
+    font-size: 18px;
+    margin-bottom: -20px;
+}
+
+.date {
+    font-size: 16px;
     font-family: 'garet';
+    color: #797277;
+    margin-bottom: -20px;
+}
+
+.rating {
+    margin-bottom: -20px;
+}
+
+.comment {
+    font-size: 18px;
     color: #211E20;
-    margin-top: -20px;
+    font-family: 'garet';
 }
 
-.right-hand-side .buttons {
-    margin-top: 215px;
+.leave-review {
+    margin-left: 50%;
 }
 
-.right-hand-side{
-    margin-top: 200px;
+.leave-review button {
+    font-family: 'garet';
+    padding: 12px 20px;
+    border: 1px solid #211E20;
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #7B9BAF;
+}
+
+button:active {
+    background-color: #A59E5C;
+}
+
+a {
+    color: #211E20;
+    font-family: 'garet';
+    text-decoration: none;
 }

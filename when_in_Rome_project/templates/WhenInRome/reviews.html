@@ -11,37 +11,39 @@
     </head>
 
 <body class="body">
-    <div class="everything">
-        <div class="left-hand-side">
-            <div class="title">
+    <a href="{% url 'WhenInRome:index' %}">Home</a>
+    <div class="container">
                 <h1 class="location-name">Koko House</h1>
-                <h2 class="review-amount">Reviews ()</h2>
-            </div>
+                <h2 class="subtitle">Reviews ()</h2>
 
-            <div class="star-data">
-                <p>5 star</p>
-                <p>4 star</p>
-                <p>3 star</p>
-                <p>2 star</p>
-                <p>1 star</p>
-            </div>
-
-            <div class="sort-buttons">
-                <button class="buttons" type="button">Most Recent</button>
-                <button class="buttons" type="button">Highest Rating</button>
-                <button class="buttons" type="button">Lowest Rating</button>
-                <button class="buttons" type="button">Photos</button>
-                <button class="buttons" type="button">Videos</button>
+        <div class="content">
+            <div class="sidebar">
+                <div class="star-row"><span>5 star</span><div class="bar"></div></div>
+                <div class="star-row"><span>4 star</span><div class="bar"></div></div>
+                <div class="star-row"><span>3 star</span><div class="bar"></div></div>
+                <div class="star-row"><span>2 star</span><div class="bar"></div></div>
+                <div class="star-row"><span>1 star</span><div class="bar"></div></div>
             </div>
         </div>
-        <div class="right-hand-side">
-            <div class="reviews">
-                <p class="name">Name</p>
+            <div class="buttons">
+                <button>Most Recent</button>
+                <button>Highest Rating</button>
+                <button>Lowest Rating</button>
+                <button>Photos ()</button>
+                <button>Videos ()</button>
+            </div>
+        <div class="main">
+            <div class="review"></div>
+            <div class="review-header">
+                <p class="username">Lauren Clarke</p>
                 <p class="date">Date</p>
                 <p class="rating">⭐️⭐️⭐️⭐️⭐️</p>
-                <p class="review">Review</p>
-                <button class="buttons" type="submit">Leave a review</button>
+                <p class="comment">Review</p>
             </div>
+        </div>
+        <div class="leave-review">
+            <button>Leave a review</button>
         </div>
     </div>
 </body>
+</html>
