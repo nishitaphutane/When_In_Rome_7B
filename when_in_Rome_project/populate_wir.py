@@ -4,77 +4,80 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'when_in_Rome_project.settings')
 import django
 django.setup()
 
+import random
 from django.contrib.auth.models import User
 from WhenInRome.models import City, Recommendation, UserProfile, Review, Upvote
 
-import random
 
 def populate():
-    users_data = [
-        {'username': 'johnsmith', 'password': 'test123', 'email': 'johnsmith@example.com'},
+    print(" - Creating Users and Profiles...")
+    users_data = [{'username': 'johnsmith', 'password': 'test123', 'email': 'johnsmith@example.com'},
         {'username': 'rachelgarcia', 'password': 'test123', 'email': 'rachelgarcia@example.com'},
         {'username': 'stevenwong', 'password': 'test123', 'email': 'stevenwong@example.com'},
         {'username': 'oliviawilson', 'password': 'test123', 'email': 'oliviawilson@example.com'},
-        {'username': 'christaylor', 'password': 'test123', 'email': 'christaylor@example.com'},
-        {'username': 'jamesstewart', 'password': 'test123', 'email': 'jamesstewart@example.com'},
     ]
 
     users = []
     for u in users_data:
-        user = add_user(u['username'], u['password'],u['email'])
+        user = add_user(u['username'], u['password'], u['email'])
         add_user_profile(user)
         users.append(user)
-    
-    for user in users:
-        potential_followers = [u for u in users if u != user]
-        followers = random.sample(potential_followers, k=random.randint(1, len(potential_followers)))
-        add_followers(user, followers)
-
 
     cities_data = {
-        'Glasgow': {
+        'Landmarks': {
             'country': 'Scotland',
-            'description': 'A vibrant cultural city',
+            'description': 'The historical heart of the city.',
+            'image': 'page_images/Landmarks.jpg',
             'recommendations': [
-                {'title': 'Kelvingrove Art Gallery', 'description': 'Art and museum', 'location': 'Kelvingrove'},
-                {'title': 'Glasgow Cathedral', 'description': 'Historic cathedral', 'location': 'Cathedral Square'},
+                {'title': 'Kelvingrove Art Gallery', 'description': 'Art and museum', 'location': 'Argyle St'},
+                {'title': 'Glasgow Cathedral', 'description': 'Historic medieval cathedral', 'location': 'Castle St'},
             ]
         },
-        'Edinburgh': {
+        'Food': {
             'country': 'Scotland',
-            'description': 'Historic capital city',
+            'description': 'The best eats in Glasgow.',
+            'image': 'page_images/Food.jpg',
             'recommendations': [
-                {'title': 'Edinburgh Castle', 'description': 'Famous fortress', 'location': 'Castle Rock'},
-                {'title': 'Arthur’s Seat', 'description': 'Great hike and views', 'location': 'Holyrood Park'},
+                {'title': 'Paesano Pizza', 'description': 'Best Neapolitan pizza', 'location': 'Miller St'},
+                {'title': 'Mother India', 'description': 'Famous tapas-style curry', 'location': 'West End'},
+            ]
+        },
+        'Transportation': {
+            'country': 'Scotland',
+            'description': 'Getting around the city with ease.',
+            'image': 'page_images/Transportation.jpg',
+            'recommendations': [
+                {'title': 'Buchanan Bus Station', 'description': 'Main bus hub', 'location': 'City Centre'},
+                {'title': 'St Enoch Subway', 'description': 'The Clockwork Orange', 'location': 'St Enoch Square'},
             ]
         }
     }
 
-    for city_name, city_data in cities_data.items():
-        c = add_city(city_name, city_data['country'], city_data['description'])
 
-        for rec in city_data['recommendations']:
-            r = add_recommendation(
-                city=c,
-                user=users[0],
-                title=rec['title'],
-                description=rec['description'],
-                location=rec['location']
-            )
+    print("- Creating Cities and Recommendations...")
+    for city_name, city_info in cities_data.items():
+        c = add_city(city_name, city_info['country'], city_info['description'], city_info['image'])
 
-            add_review(r, users[1], rating=5, comment="Amazing!")
-            add_review(r, users[2], rating=4, comment="Really good!")
+        for rec in city_info['recommendations']:
+            author = random.choice(users)
+            r = add_recommendation(c, author, rec['title'], rec['description'], rec['location'])
 
-            for user in users:
+            add_review(r, random.choice(users), rating=5, comment="Amazing place!")
+            add_review(r, random.choice(users), rating=4, comment="Really enjoyed it.")
+
+            for u in users:
                 if random.random() > 0.5:
-                    add_upvote(r, user)
+                    add_upvote(r, u)
+            
+        print(" - Setting up followers...")
+        for user in users:
+            potential_followers = [u for u in users if u != user]
+            followers = random.sample(potential_followers, k=random.randint(1, len(potential_followers)))
+            add_followers(user, followers)
+        print("Success: Database populated!")
 
-    for c in City.objects.all():
-        for r in Recommendation.objects.filter(city=c):
-            print(f'- {c}: {r}')
 
-
-def add_user(username, password, email =''):
+def add_user(username, password, email=''):
     user, created = User.objects.get_or_create(username=username)
     if created:
         user.set_password(password)
@@ -82,50 +85,46 @@ def add_user(username, password, email =''):
     user.save()
     return user
 
-
 def add_user_profile(user):
     profile, created = UserProfile.objects.get_or_create(user=user)
-    profile.bio = f"Hi, I'm {user.username}"
+    profile.bio = f"Hi, I'm {user.username}, a travel enthusiast!"
     profile.save()
-    return profile
+    return profile 
 
-
-def add_city(name, country, description):
+def add_city(name, country, description, image):
     c, created = City.objects.get_or_create(name=name)
     c.country = country
     c.description = description
+    c.image = image
     c.save()
     return c
 
-
 def add_recommendation(city, user, title, description, location):
-    r, created = Recommendation.objects.get_or_create(city=city, title=title, user=user)
-    r.description = description
-    r.location = location
-    r.save()
-    return r
-
-
-def add_review(recommendation, user, rating, comment):
-    review, created = Review.objects.get_or_create(recommendation=recommendation,user=user,defaults={'rating': rating,'comment': comment})
-
+    r, created = Recommendation.objects.get_or_create(
+        city=city,
+        title=title,
+        user=user,
+        defaults={'description': description, 'location': location}
+    )
     if not created:
-        review.rating = rating
-        review.comment = comment
-        review.save()
-
+        r.description = description
+        r.location = location
+        r.save()
+    return r
+def add_review(recommendation, user, rating, comment):
+    review, created = Review.objects.get_or_create(
+        recommendation=recommendation,
+        user=user,
+        defaults={'rating': rating, 'comment': comment}
+    )
     return review
 
-
 def add_upvote(recommendation, user):
-    upvote, created = Upvote.objects.get_or_create(
-        recommendation=recommendation,
-        user=user
-    )
+    upvote, created = Upvote.objects.get_or_create(recommendation=recommendation, user=user)
     return upvote
 
 def add_followers(user, followers):
-    profile = UserProfile.objects.get(user=user)
+    profile = UserProfile.objects.get_or_create(user=user)[0]
     for follower in followers:
         profile.followers.add(follower)
     profile.save()

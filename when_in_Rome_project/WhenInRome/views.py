@@ -5,38 +5,34 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse
-from django.shortcuts import render
 from WhenInRome.models import City, Recommendation, UserProfile,Review,Upvote
 from WhenInRome.forms import UserForm, UserProfileForm, RecommendationForm, CityForm
 from django.urls import reverse
 from django.db.models import Count
-from django.http import JsonResponse
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User 
 
 def index(request):
-    context_dict = {}
     city_list = City.objects.annotate(total_upvotes=Count('recommendation__upvote')).order_by('-total_upvotes')[:5]
-    context_dict['pages'] = None
-    return render(request, 'wheninrome/index.html', context=context_dict)
+    context_dict = {'categories': city_list}
+    return render(request, 'WhenInRome/index.html', context=context_dict)
 
 def about(request):
     context_dict = {}
     print(request.method)
     print(request.user)
-    response = render(request, 'wheninrome/about.html', context = context_dict)
+    response = render(request, 'WhenInRome/about.html', context = context_dict)
     return response
 
 def show_category(request, category_name_slug):
     context_dict = {}
     try:
-        category = City.objects.get(slug=category_name_slug)
-        pages = Recommendation.objects.filter(category=category)
+        city = City.objects.get(slug=category_name_slug)
+        pages = Recommendation.objects.filter(city=city)
         context_dict['pages'] = pages
-        context_dict['category'] = category
+        context_dict['city'] = city
     except City.DoesNotExist:
-        context_dict['category'] = None
-        context_dict['pages'] = None
-    return render(request, 'wheninrome/category.html', context=context_dict)
+        context_dict['city'] = None
+    return render(request, 'WhenInRome/category.html', context_dict)
 
 @login_required
 def add_category(request):
@@ -46,10 +42,10 @@ def add_category(request):
         form = CityForm(request.POST)
     if form.is_valid():
         form.save(commit=True)
-        return redirect('/wheninrome/')
+        return redirect(reverse('WhenInRome:index'))
     else:
         print(form.errors)
-    return render(request, 'wheninrome/category.html', {'form': form})
+    return render(request, 'WhenInRome/category.html', {'form': form})
 
 @login_required
 def add_page(request, category_name_slug):
@@ -59,23 +55,26 @@ def add_page(request, category_name_slug):
         category = None
 
     if category is None:
-        return redirect('/wheninrome/')
+        return redirect(reverse('WhenInRome:index'))
     
     form = RecommendationForm()
 
     if request.method == 'POST':
-        form = RecommendationForm(request.POST)
+        form = RecommendationForm(request.POST, request.FILES)
     
     if form.is_valid():
         if category:
             recommendation = form.save(commit=False)
-            recommendation.category = category
-            recommendation.views = 0
+            recommendation.city = category
+            recommendation.user = request.user
             recommendation.save()
 
-            return redirect(reverse('wheninrome:show_category', kwargs={'category_name_slug': category_name_slug}))
+            return redirect(reverse('WhenInRome:show_category', kwargs={'category_name_slug': category_name_slug}))
         else:
             print(form.errors)
+    else:
+        form = RecommendationForm()
+    return render(request, 'WhenInRome/add_page.html', {'form': form, 'category': category}) 
 
 def register(request):
     registered = False
@@ -88,7 +87,6 @@ def register(request):
             user = user_form.save()
             user.set_password(user.password)
             user.save()
-
             profile = profile_form.save(commit=False)
             profile.user = user
 
@@ -145,21 +143,18 @@ def profile(request, username):
     selected_user = get_object_or_404(User, username=username)
     user_profile, created = UserProfile.objects.get_or_create(user=selected_user)
 
-    is_following = request.user in user_profile.followers.all()
-    follower_count = user_profile.followers.count()
-    following_count = UserProfile.objects.filter(followers=selected_user).count()
-    recommendations = Recommendation.objects.filter(user=selected_user)[:4]
-    reviews = Review.objects.filter(user=selected_user)
+    is_following = False
+    if request.user in user_profile.followers.all():
+        is_following = True
 
-    return render(request, 'WhenInRome/profile.html', {
+    context_dict = {
         'selected_user': selected_user,
         'user_profile': user_profile,
         'is_following': is_following,
-        'follower_count': follower_count,
-        'following_count': following_count,
-        'recommendations': recommendations,
-        'reviews': reviews,
-    })
+        'follower_count': user_profile.followers.count(),
+    }
+
+    return render(request, 'WhenInRome/profile.html', context=context_dict)
 
 @login_required
 def follow_user(request, username):

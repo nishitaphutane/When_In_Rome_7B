@@ -5,6 +5,27 @@
     <h1>{{ selected_user.username }}'s Profile</h1>
 
     {% if user_profile.picture %}
+        <img src="{{ user_profile.picture.url }}" alt="{{ selected_user.username }}" width="200">
+    {% endif %}
+
+    <p><strong>Email:</strong> {{ selected_user.email }}</p>
+    <p><strong>Bio:</strong> {{ user_profile.bio }}</p>
+    <p><strong>Followers:</strong> {{ follower_count }}</p>
+
+    {% if user.username != selected_user.username %}
+        <form method="post" action="{% url 'WhenInRome:follow_user' selected_user.username %}">
+            {% csrf_token %}
+            {% if is_following %}
+                <button type="submit" class="btn btn-danger">Unfollow</button>
+            {% else %}
+                <button type="submit" class="btn btn-primary">Follow</button>
+            {% endif %}
+        </form>
+    {% endif %}
+    <h1>{{ user.username }}'s Profile</h1>
+    <h1>{{ selected_user.username }}'s Profile</h1>
+
+    {% if user_profile.picture %}
     <img src="{{ user_profile.picture.url }}" alt="{{ selected_user.username }}" width="200"
         style="border-radius: 50%;">
     {% else %}
