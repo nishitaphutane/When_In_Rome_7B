@@ -14,7 +14,7 @@
     font-style: normal;
 }
 
-.body {
+body {
     background-color: #E3DFD9;
     color: #211E20;
     font-family: 'garet', 'Arial', sans-serif;
@@ -40,6 +40,7 @@ a:hover {
     display: flex;
     flex-direction: column;
     position: relative;
+    padding-bottom: 50px;
 }
 
 .logo-cursive {
@@ -78,6 +79,9 @@ a:hover {
     box-shadow: 0 10px 25px rgba(0,0,0,0.08);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     border-radius: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .stamp-card:hover {
@@ -92,12 +96,14 @@ a:hover {
     object-fit: cover;
     border: 10px solid #001f3f;
     border-radius: 35px;
+    display: block;
 }
 
 .recommendation-title {
     font-family: 'black-mango', serif;
     font-size: 1.4rem;
     color: #211E20;
+    margin-top: 15px;
 }
 
 .login-page {
