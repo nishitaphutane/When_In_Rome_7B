@@ -14,7 +14,7 @@
     font-style: normal;
 }
 
-body {
+.body {
     background-color: #E3DFD9;
     color: #211E20;
     font-family: 'garet', 'Arial', sans-serif;
@@ -24,6 +24,7 @@ body {
 
 a {
     color: #211E20;
+    font-family: 'garet';
     text-decoration: none;
     transition: 0.2s;
 }
@@ -31,7 +32,6 @@ a {
 a:hover {
     color: #7B9BAF;
 }
-
 
 .hero-section {
     background-size: cover;
@@ -48,73 +48,203 @@ a:hover {
     color: white !important;
 }
 
+.hero-description {
+    max-width: 700px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+}
+
+.hero-search-container {
+    max-width: 600px;
+    width: 90%;
+}
+
+.btn-search {
+    background-color: #deb169;
+    color: white;
+    border: none;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.btn-search:hover {
+    background-color: #c59b56;
+    color: white;
+}
+
 .stamp-card {
     background: white;
     padding: 20px;
+    margin-bottom: 20px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.08);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+    border-radius: 0;
 }
 
 .stamp-card:hover {
-    transform: scale(1.03) rotate(2deg);
+    transform: scale(1.05) rotate(3deg);
     background-color: #fffef2;
-}
-
-.stamp-img-container {
-    width: 100%;
-    height: 250px;
-    overflow: hidden;
-    border: 10px solid #001f3f;
-    border-radius: 35px;
-    background-color: #f0f0f0;
+    z-index: 10;
 }
 
 .stamp-image {
     width: 100%;
-    height: 100%;
-    object-fit: cover; 
-    display: block;
+    height: 280px;
+    object-fit: cover;
+    border: 10px solid #001f3f;
+    border-radius: 35px;
 }
 
-
-.results-title, .glance-title {
+.recommendation-title {
     font-family: 'black-mango', serif;
+    font-size: 1.4rem;
+    color: #211E20;
 }
 
-.btn-dark {
-    background-color: #001f3f;
-    border: none;
-    border-radius: 20px;
-    padding: 8px 20px;
-}
-
-.btn-dark:hover {
-    background-color: #deb169;
-}
-
-/* Login Page Styles */
 .login-page {
     background-color: #E3DFD9;
     height: 100vh;
+    margin: 0;
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+    overflow: hidden;
 }
 
 .login-container {
     background-color: #7f9cab;
-    padding: 40px;
+    padding: 60px 40px;
     border-radius: 30px;
     width: 350px;
     text-align: center;
     color: white;
+    z-index: 2;
     box-shadow: 0 15px 35px rgba(0,0,0,0.2);
 }
 
 .login-container h1 {
     font-family: 'black-mango';
+    font-weight: lighter;
     font-size: 3rem;
+    margin-bottom: 30px;
+}
+
+.login-container input {
+    font-family: 'garet';
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 8px;
+}
+
+.login-container button {
+    font-family: 'black-mango';
+    font-size: 1.2rem;
+    margin-top: 20px;
+    padding: 10px 25px;
+    border-radius: 20px;
+    border: none;
+    background: white;
+    color: #7f9cab;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.login-container button:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+}
+
+.stamp {
+    position: absolute;
+    opacity: 0.8;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.pisa {
+    rotate: 18.1deg;
+    left: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 200px;
+}
+
+.vatican {
+    top: 40px;
+    right: 40px;
+    width: 220px;
+}
+
+.colosseum {
+    rotate: -12.2deg;
+    bottom: 40px;
+    right: 60px;
+    width: 220px;
+}
+
+.location-name {
+    font-family: 'black-mango';
+    color: #211E20;
+    font-size: 40px;
+    font-weight: 500;
+}
+
+.subtitle {
+    font-family: 'garet';
+    color: #211E20;
+    font-weight: lighter;
+    margin-top: -15px;
+    font-size: 30px;
+}
+
+.star-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+.bar {
+    height: 6px;
+    background-color: white;
+    flex: 1;
+    border-radius: 4px;
+}
+
+.username {
+    font-family: 'black-mango';
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.comment {
+    font-size: 18px;
+    color: #211E20;
+    font-family: 'garet';
+    line-height: 1.4;
+}
+
+.upload-rec-btn {
+    display: inline-block;
+    font-family: 'garet', sans-serif;
+    font-size: 0.88rem;
+    padding: 8px 18px;
+    border: 2px solid #5b5b5b;
+    border-radius: 10px;
+    background: #f7f7f7;
+    color: #333;
+    text-decoration: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-dark {
+    background-color: #001f3f;
+    border: none;
+    color: white;
+}
+
+.btn-dark:hover {
+    background-color: #deb169;
 }
