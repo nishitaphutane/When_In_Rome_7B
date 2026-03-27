@@ -37,25 +37,14 @@ class UserProfileForm(forms.ModelForm):
         fields = ('bio', 'picture')
 
 class RecommendationForm(forms.ModelForm):
-    title = forms.CharField(max_length=128,
-                            help_text="Please enter the title of the recommendation.")
-    url = forms.URLField(max_length=200,
-                         help_text="Please enter the URL of the recommendation.")
-    views = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
+    title = forms.CharField(max_length=128)
+    location = forms.CharField(max_length=256, required=False)
+    description = forms.CharField(widget=forms.Textarea, required=False)
+    image = forms.ImageField(required=False)
 
     class Meta:
         model = Recommendation
-        exclude = ('city',)
-    
-    def clean(self):
-        cleaned_data = self.cleaned_data
-        url = cleaned_data.get('url')
-
-        if url and not url.startswith('http://'):
-            url = f'http://{url}'
-            cleaned_data['url'] = url
-
-        return cleaned_data
+        fields = ('title', 'location', 'description', 'image')
     
 class CityForm(forms.ModelForm):
     name = forms.CharField(max_length=128,
