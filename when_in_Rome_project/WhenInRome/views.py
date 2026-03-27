@@ -1,41 +1,70 @@
 import datetime
+from django.db import models
 from django.shortcuts import render, redirect, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse
-from django.shortcuts import render
 from WhenInRome.models import City, Recommendation, UserProfile,Review,Upvote
-from WhenInRome.forms import UserForm, UserProfileForm, RecommendationForm, CityForm
+from WhenInRome.forms import UserForm, UserProfileForm, RecommendationForm, CityForm, ReviewForm
 from django.urls import reverse
 from django.db.models import Count
+from django.contrib.auth.models import User 
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 
+
+@login_required
+def upload_recommendation(request):
+    if request.method == 'POST':
+        form = RecommendationForm(request.POST, request.FILES)
+        if form.is_valid():
+            category_value = request.POST.get('category', '').strip()
+            city = City.objects.filter(slug=category_value).first()
+
+            if not city:
+                city = City.objects.filter(name__iexact=category_value).first()
+
+            if not city:
+                return JsonResponse(
+                    {"error": f"Category '{category_value}' not found."},
+                    status=400
+                )
+
+            recommendation = form.save(commit=False)
+            recommendation.city = city
+            recommendation.user = request.user
+            recommendation.save()
+
+            return JsonResponse({"success": True})
+        else:
+            return JsonResponse({"error": "Invalid form data.", "fields": form.errors}, status=400)
+
+    cities = City.objects.all()
+    return render(request, 'WhenInRome/upload_recommendation.html', {'cities': cities})
 def index(request):
-    context_dict = {}
     city_list = City.objects.annotate(total_upvotes=Count('recommendation__upvote')).order_by('-total_upvotes')[:5]
-    context_dict['pages'] = None
-    return render(request, 'wheninrome/index.html', context=context_dict)
+    context_dict = {'categories': city_list}
+    return render(request, 'WhenInRome/index.html', context=context_dict)
 
 def about(request):
     context_dict = {}
     print(request.method)
     print(request.user)
-    visitor_cookie_handler(request)
-    context_dict['visits'] = request.session['visits']
-    response = render(request, 'wheninrome/about.html', context = context_dict)
+    response = render(request, 'WhenInRome/about.html', context = context_dict)
     return response
 
 def show_category(request, category_name_slug):
     context_dict = {}
     try:
-        category = City.objects.get(slug=category_name_slug)
-        pages = Recommendation.objects.filter(category=category)
+        city = City.objects.get(slug=category_name_slug)
+        pages = Recommendation.objects.filter(city=city)
         context_dict['pages'] = pages
-        context_dict['category'] = category
+        context_dict['city'] = city
     except City.DoesNotExist:
-        context_dict['category'] = None
-        context_dict['pages'] = None
-    return render(request, 'wheninrome/index.html', context=context_dict)
+        context_dict['city'] = None
+    return render(request, 'WhenInRome/category.html', context_dict)
 
 @login_required
 def add_category(request):
@@ -45,10 +74,10 @@ def add_category(request):
         form = CityForm(request.POST)
     if form.is_valid():
         form.save(commit=True)
-        return redirect('/wheninrome/')
+        return redirect(reverse('WhenInRome:index'))
     else:
         print(form.errors)
-    return render(request, 'wheninrome/category.html', {'form': form})
+    return render(request, 'WhenInRome/category.html', {'form': form})
 
 @login_required
 def add_page(request, category_name_slug):
@@ -58,23 +87,26 @@ def add_page(request, category_name_slug):
         category = None
 
     if category is None:
-        return redirect('/wheninrome/')
+        return redirect(reverse('WhenInRome:index'))
     
     form = RecommendationForm()
 
     if request.method == 'POST':
-        form = RecommendationForm(request.POST)
+        form = RecommendationForm(request.POST, request.FILES)
     
     if form.is_valid():
         if category:
             recommendation = form.save(commit=False)
-            recommendation.category = category
-            recommendation.views = 0
+            recommendation.city = category
+            recommendation.user = request.user
             recommendation.save()
 
-            return redirect(reverse('wheninrome:show_category', kwargs={'category_name_slug': category_name_slug}))
+            return redirect(reverse('WhenInRome:show_category', kwargs={'category_name_slug': category_name_slug}))
         else:
             print(form.errors)
+    else:
+        form = RecommendationForm()
+    return render(request, 'WhenInRome/add_page.html', {'form': form, 'category': category}) 
 
 def register(request):
     registered = False
@@ -87,7 +119,6 @@ def register(request):
             user = user_form.save()
             user.set_password(user.password)
             user.save()
-
             profile = profile_form.save(commit=False)
             profile.user = user
 
@@ -144,18 +175,21 @@ def profile(request, username):
     selected_user = get_object_or_404(User, username=username)
     user_profile, created = UserProfile.objects.get_or_create(user=selected_user)
 
-    is_following = False
-    if request.user in user_profile.followers.all():
-        is_following = True
+    is_following = request.user in user_profile.followers.all()
+    follower_count = user_profile.followers.count()
+    following_count = UserProfile.objects.filter(followers=selected_user).count()
+    recommendations = Recommendation.objects.filter(user=selected_user)[:4]
+    reviews = Review.objects.filter(user=selected_user)
 
-    context_dict = {
+    return render(request, 'WhenInRome/profile.html', {
         'selected_user': selected_user,
         'user_profile': user_profile,
         'is_following': is_following,
-        'follower_count': user_profile.followers.count(),
-    }
-
-    return render(request, 'WhenInRome/profile.html', context=context_dict)
+        'follower_count': follower_count,
+        'following_count': following_count,
+        'recommendations': recommendations,
+        'reviews': reviews,
+    })
 
 @login_required
 def follow_user(request, username):
@@ -203,3 +237,135 @@ def visitor_cookie_handler(request):
         request.session['last_visit'] = last_visit_cookie
     request.session['visits'] = visits
 
+@login_required
+def recommendation_upvotes(request, recommendation_id):
+    #Checks if request is POST
+    if request.method == 'POST':
+        recommendation = get_object_or_404(Recommendation, id=recommendation_id)
+        user = request.user
+
+        #Check if user already upvoted this recommendation
+        existing_upvote = Upvote.objects.filter(user=user, recommendation=recommendation).first()
+
+        #If upvoted remove it
+        if existing_upvote:
+            existing_upvote.delete()
+            return JsonResponse({
+                "Result": "Removed",
+                "Upvotes": recommendation.upvote_count
+            })
+        else:
+        #If not upvoted create new upvote
+            Upvote.objects.create(user=user, recommendation=recommendation)
+            return JsonResponse({
+                "Result": "Added",
+                "Upvotes": recommendation.upvote_count
+            })
+    #If not POST return error
+    return JsonResponse({"Result": "Error"}, status=400)
+
+def view_reviews(request):
+    reviews = Review.objects.filter(recommendation=recommendation).order_by('-created_at')
+
+    return render(request, 'your_template.html', {
+        'recommendation': recommendation,
+        'reviews': reviews
+    })
+
+@login_required
+def add_review(request, recommendation_id):
+    recommendation = get_object_or_404(Recommendation, id=recommendation_id)
+
+    # GET → show page
+    if request.method == 'GET':
+        form = ReviewForm()
+        return render(request, 'WhenInRome/add_review.html', {
+            'form': form,
+            'recommendation': recommendation
+        })
+
+    # POST → return JSON
+    if request.method == 'POST':
+
+        if Review.objects.filter(user=request.user, recommendation=recommendation).exists():
+            return JsonResponse({"error": "You have already reviewed this recommendation."}, status=400)
+
+        form = ReviewForm(request.POST)
+
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.recommendation = recommendation
+            review.user = request.user
+            review.save()
+
+            return JsonResponse({
+                "success": True,
+                "review": {
+                    "username": request.user.username,
+                    "rating": review.rating,
+                    "comment": review.comment,
+                }
+            }, status=201)
+
+        return JsonResponse({"error": "Invalid data.", "fields": form.errors}, status=400)
+
+@login_required
+def upload_picture(request):
+    if request.method == 'POST':
+        user_profile, created = UserProfile.objects.get_or_create(user=request.user)
+        profile_form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+
+        if profile_form.is_valid():
+            if 'picture' in request.FILES:
+                user_profile.picture = request.FILES['picture']
+            profile_form.save()
+            messages.success(request, 'Profile picture updated successfully.')
+        else:
+            messages.error(request, 'Failed to update profile picture.')
+
+    return redirect(reverse('WhenInRome:profile', kwargs={'username': request.user.username}))
+
+@login_required
+def update_profile(request):
+    if request.method == 'POST':
+        profile = request.user.userprofile
+        profile.pronouns = request.POST.get('pronouns', '').strip()
+        profile.city = request.POST.get('city', '').strip()
+        profile.country = request.POST.get('country', '').strip()
+        if 'location_flag' in request.FILES:
+            profile.location_flag = request.FILES['location_flag']
+        profile.save()
+    return redirect('WhenInRome:profile', username=request.user.username)
+
+
+@login_required
+def update_visited(request):
+    if request.method == 'POST':
+        cities = [c.strip() for c in request.POST.getlist('visited_city') if c.strip()]
+        flags = request.FILES.getlist('visited_flag')
+
+        request.user.visited_cities.all().delete()
+
+        for i, city_name in enumerate(cities):
+            city = request.user.visited_cities.create(city_name=city_name)
+            if i < len(flags) and flags[i]:
+                city.flag_image = flags[i]
+                city.save()
+
+    return redirect('WhenInRome:profile', username=request.user.username)
+
+def search_view(request):
+    query = request.GET.get('q', '').strip()
+    cities = []
+    recommendations = []
+ 
+    if query:
+        # filter(name__icontains) = filter(field to do a case_insensetive search in)
+        cities = City.objects.filter(name__icontains=query) | City.objects.filter(country__icontains=query)
+        recommendations = Recommendation.objects.filter(title__icontains=query) | Recommendation.objects.filter(location__icontains=query)
+ 
+    return render(request, 'WhenInRome/search_results.html', {
+        'cities': cities,
+        'recommendations': recommendations,
+        'query': query
+    })

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>When In Rome</title>
+        <link rel="stylesheet" href="{% static 'css/style.css' %}?v=2">
+        <link rel="stylesheet" href="./../../static/css/style.css">
+    </head>
+
+<body class="body">
+    <div class="container">
+                <h1 class="location-name">{{ recommendation.title }}</h1>
+                <h2 class="subtitle">Reviews ({{ reviews|length }})</h2>
+
+        <div class="content">
+            <div class="sidebar">
+                {% for i in "54321" %}
+                <div class="star-row"><span>{{ i }} star</span><div class="bar"></div></div>
+                {% endfor %}
+            </div>
+        </div>
+            <div class="buttons">
+                <button>Most Recent</button>
+                <button>Highest Rating</button>
+                <button>Lowest Rating</button>
+                <button>Photos ()</button>
+                <button>Videos ()</button>
+            </div>
+        <div class="main" id="reviews-container">
+            {% for review in reviews %}
+            <div class="review"></div>
+            <div class="review-header">
+                <p class="username">{{ review.user.username }}</p>
+                <p class="date">{{ review.created_at|date:"M d, Y" }}</p>
+                <p class="rating">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= review.rating %}★
+                        {% else %}☆
+                        {% endif %}
+            {% endfor %}</p>
+                <p class="comment">{{ review.comment }}</p>
+            </div>
+        </div>
+        <div class="leave-review">
+            <button>Leave a review</button>
+        </div>
+    </div>
+
+    <script>
+        function openModal(){ document.getElementById('review-modal').style.display='flex'; }
+        function closeModal(){ document.getElementById('review-modal').style.display='none'; }
+
+        const stars = document.querySelectorAll('#star-input span');
+        let selectedRating = 0;
+
+        stars.forEach((star, index) => {
+            star.addEventListener('mouseover', () => {
+                highlightStars(index + 1);
+            });
+
+            star.addEventListener('mouseout', () => {
+                highlightStars(selectedRating);
+            });
+
+            star.addEventListener('click', () => {
+                selectedRating = index + 1;
+                document.getElementById('rating').value = selectedRating;
+                highlightStars(selectedRating);
+            });
+        });
+
+        function highlightStars(rating){
+            stars.forEach((s, i) => {
+                s.classList.toggle('active', i < rating);
+            });
+        };
+    document.getElementById('review-form').addEventListener('submit', function(e){
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        fetch("{% url 'add_review' recommendation.id %}", {
+            method: 'POST',
+            headers: { 'X-CSRFToken': formData.get('csrfmiddlewaretoken') },
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success){
+                const container = document.getElementById('reviews-container');
+
+                const stars = '★'.repeat(data.review.rating) + '☆'.repeat(5 - data.review.rating);
+
+                const newReview = `
+                    <div class="review">
+                        <div class="username">${data.review.username}</div>
+                        <div class="date">Just now</div>
+                        <div class="stars">${stars}</div>
+                        <div class="comment">${data.review.comment}</div>
+                    </div>
+                `;
+
+                container.insertAdjacentHTML('afterbegin', newReview);
+                closeModal();
+            } else {
+                alert(data.error);
+            }
+        });
+    });
+    </script>
+</body>
+</html>

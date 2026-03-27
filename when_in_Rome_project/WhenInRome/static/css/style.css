@@ -19,7 +19,7 @@
     color: #211E20;
 }
 
-body {
+.body {
     background-color: #E3DFD9;
 }
 
@@ -82,6 +82,89 @@ body {
     position: relative;
 }
 
+.search-box-wrapper .input-group {
+    border-radius: 50px;
+    overflow: hidden;
+    background: white;
+    display: flex;
+    align-items: center;
+}
+.search-box-wrapper {
+    background: white !important;
+    border-radius: 50px;
+    padding: 4px;
+    width: 500px;
+    display: flex;
+    align-items: center;
+}
+
+.hero-search-input {
+    flex-grow: 1;
+    border: none !important;
+    background: transparent !important;
+    border-radius: 50px;
+    padding-left: 25px;
+    font-size: 1.1rem;
+    outline: none;
+}
+
+.hero-search-input:focus {
+    box-shadow: none;
+}
+
+
+.btn-search {
+    background-color: #deb169;
+    color: white;
+    border: none;
+    border-radius: 50px !important;
+    margin: 2px;
+    padding: 10px 30px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.logo-cursive {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.5rem;
+    color: white;
+    text-decoration: none;
+}
+
+.results-title {
+    font-family: 'Playfair Display', serif;
+    color: #002d5b;
+}
+
+.stamp-card {
+    background: white;
+    padding: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin-bottom: 20px;
+}
+
+.stamp-card:hover {
+    transform: scale(1.05) rotate(3deg);
+    background-color: #fffef2;
+    z-index: 10;
+}
+
+.stamp-image {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    border: 10px solid #001f3f;
+    border-radius: 35px;
+}
+
+.upvote-icon {
+    color: #28a745;
+    font-size: 1.5rem;
+    text-decoration: none;
+    font-weight: bold;
+}
+
 .login-container {
     background-color: #7f9cab;
     padding: 60px 40px;
@@ -120,6 +203,33 @@ body {
     font-weight: bold;
 }
 
+.hero-section {
+    background-size: cover;
+    background-position: center;
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-bottom: 40px;
+}
+
+.hero-search-container {
+    display: flex;
+    justify-content: center;
+    padding: 0 20px;
+    max-width: 600px;
+    margin: auto;
+    width: 100%;
+
+
+.hero-search-container .search-box-wrapper {
+    width: 100%;
+}
+}
+.hero-section {
+    background-image: url('/static/images/Glasgow.jpg');
+}
+
 .login-container p {
     font-family: 'garet';
 }
@@ -128,6 +238,12 @@ body {
     color: white;
     font-family: 'black-mango';
     font-weight: lighter;
+}
+
+.stamp {
+    position: absolute;
+    opacity: 0.8;
+    z-index: 1;
 }
 
 .stamp {
@@ -157,193 +273,21 @@ body {
     width: 220px;
 }
 
-.container {
-    padding: 30px;
-    border-radius: 8px;
-}
-
-.location-name {
-    font-family: 'black-mango';
-    color: #211E20;
-    font-size: 40px;
-    font-weight: 500;
-}
-
-.subtitle {
-    font-family: 'garet';
-    color: #211E20;
-    font-weight: lighter;
-    margin-top: -25px;
-    font-size: 30px;
-}
-
-.content {
-    display: flex;
-    gap: 40px;
-}
-
-.sidebar {
-    width: 250px;
-}
-
-.star-row {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.star-row span {
-    width: 60px;
-}
-
-.bar {
-    height: 6px;
-    background-color: white;
-    flex: 1;
-    border-radius: 4px;
-}
-
-.buttons button {
-    font-family: 'garet';
-    width: 25%;
-    margin: 10px 0;
-    padding: 10px;
-    border: 1px solid #211E20;
-    background: white;
-    border-radius: 6px;
-    cursor: pointer;
-    display: block;
-    
-}
-
-.main {
-    flex: 1;
-    margin-left: 50%;
-    align-items: center;
-}
-
-.review {
-    margin-bottom: -75%;
-}
-
-.review-header {
-    display: block;
-    gap: 30px;
-}
-
-.username {
-    font-family: 'black-mango';
-    font-size: 18px;
-    margin-bottom: -20px;
-}
-
-.date {
-    font-size: 16px;
-    font-family: 'garet';
-    color: #797277;
-    margin-bottom: -20px;
-}
-
-.rating {
-    margin-bottom: -20px;
-}
-
-.comment {
-    font-size: 18px;
-    color: #211E20;
-    font-family: 'garet';
-}
-
-.leave-review {
-    margin-left: 50%;
-}
-
-.leave-review button {
-    font-family: 'garet';
-    padding: 12px 20px;
-    border: 1px solid #211E20;
-    background: white;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #7B9BAF;
-}
-
-button:active {
-    background-color: #A59E5C;
-}
-
-a {
-    color: #211E20;
-    font-family: 'garet';
+.upload-rec-btn {
+    display: inline-block;
+    font-family: 'garet', sans-serif;
+    font-size: 0.88rem;
+    padding: 8px 18px;
+    border: 2px solid #5b5b5b;
+    border-radius: 10px;
+    background: #f7f7f7;
+    color: #333;
     text-decoration: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.14);
+    transition: background 0.2s ease;
+    white-space: nowrap;
 }
 
-.recommendation-container {
-    background-color: #7f9cab;
-    padding: 60px 40px;
-    border-radius: 30px;
-    width: 350px;
-    text-align: center;
-    color: white;
-    z-index: 2;
-    margin-left: 30%;
+.upload-rec-btn:hover {
+    background: #ececec;
 }
-
-#upload-text {
-    font-family: 'black-mango';
-    color: white;
-    margin-bottom: 25px;
-}
-
-label {
-    font-family: 'black-mango';
-    color: white;
-    display: block;
-    margin-top: 15px;
-    font-weight: bold;
-}
-
-input, textarea, select {
-    width: 100%;
-    padding: 10px;
-    margin-top: 8px;
-    border-radius: 6px;
-    border: 1px solid #211E20;
-}
-
-textarea {
-    font-family: 'garet';
-    height: 120px;
-}
-
-.image-preview {
-    margin-top: 15px;
-    text-align: center;
-}
-
-.image-preview img {
-    max-width: 200px;
-    border-radius: 12px;
-    border: 6px solid #0a1f5c;
-}
-
-.upload-button {
-    margin-top: 20px;
-    padding: 12px;
-    width: 100%;
-    background: white;
-    color: #211E20;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.message {
-    margin-top: 15px;
-}
-
-.success { color: #A59E5C; }
-.error { color: #BC6353; }
