@@ -304,6 +304,8 @@ def update_profile(request):
         profile.pronouns = request.POST.get('pronouns', '').strip()
         profile.city = request.POST.get('city', '').strip()
         profile.country = request.POST.get('country', '').strip()
+        if 'location_flag' in request.FILES:
+            profile.location_flag = request.FILES['location_flag']
         profile.save()
     return redirect('WhenInRome:profile', username=request.user.username)
 
@@ -312,12 +314,15 @@ def update_profile(request):
 def update_visited(request):
     if request.method == 'POST':
         cities = [c.strip() for c in request.POST.getlist('visited_city') if c.strip()]
-        
-        # Delete all existing and recreate from form
+        flags = request.FILES.getlist('visited_flag')
+
         request.user.visited_cities.all().delete()
-        
-        for city_name in cities:
-            request.user.visited_cities.create(city_name=city_name)
-            
+
+        for i, city_name in enumerate(cities):
+            city = request.user.visited_cities.create(city_name=city_name)
+            if i < len(flags) and flags[i]:
+                city.flag_image = flags[i]
+                city.save()
+
     return redirect('WhenInRome:profile', username=request.user.username)
 

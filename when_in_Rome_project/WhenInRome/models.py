@@ -58,14 +58,16 @@ class UserProfile(models.Model):
         blank=True,
         related_name='following_profiles'
     )
+    location_flag = models.ImageField(upload_to='location_flags/', blank=True, null=True)
 
     def __str__(self):
         return self.user.username
 
 class VisitedCity(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='visited_cities')
-    city_name = models.CharField(max_length=128)
-    country_flag = models.CharField(max_length=10, blank=True)  # e.g. "🇬🇧"
+    city_name = models.CharField(max_length=100)
+    country_flag = models.CharField(max_length=10, blank=True)  
+    flag_image = models.ImageField(upload_to='flag_images/', blank=True, null=True)  
 
     def __str__(self):
         return f"{self.user.username} visited {self.city_name}"

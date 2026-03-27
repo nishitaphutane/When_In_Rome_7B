@@ -19,7 +19,7 @@
     color: #211E20;
 }
 
-.body {
+body {
     background-color: #E3DFD9;
 }
 
@@ -280,3 +280,70 @@ a {
     font-family: 'garet';
     text-decoration: none;
 }
+
+.recommendation-container {
+    background-color: #7f9cab;
+    padding: 60px 40px;
+    border-radius: 30px;
+    width: 350px;
+    text-align: center;
+    color: white;
+    z-index: 2;
+    margin-left: 30%;
+}
+
+#upload-text {
+    font-family: 'black-mango';
+    color: white;
+    margin-bottom: 25px;
+}
+
+label {
+    font-family: 'black-mango';
+    color: white;
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    border-radius: 6px;
+    border: 1px solid #211E20;
+}
+
+textarea {
+    font-family: 'garet';
+    height: 120px;
+}
+
+.image-preview {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.image-preview img {
+    max-width: 200px;
+    border-radius: 12px;
+    border: 6px solid #0a1f5c;
+}
+
+.upload-button {
+    margin-top: 20px;
+    padding: 12px;
+    width: 100%;
+    background: white;
+    color: #211E20;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.message {
+    margin-top: 15px;
+}
+
+.success { color: #A59E5C; }
+.error { color: #BC6353; }

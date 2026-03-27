@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./../../static/css/style.css">
+
+<title>Upload Recommendation</title>
+
+</head>
+<body>
+    
+<img src="{% static 'images/pisaSticker.png' %}" class="stamp pisa" alt="leaning tower of pisa in passport stamp style">
+<img src="{% static 'images/romeSticker.png' %}" class="stamp vatican" alt="Vatican in passport stamp style">
+<img src="{% static 'images/colosseumSticker.png' %}" class="stamp colosseum" alt="colosseum in passport stamp style">
+
+<div class="recommendation-container">
+    <h1 id="upload-text">Upload a Recommendation</h1>
+
+    <form id="recommendation-form" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <label>Title</label>
+        <input type="text" name="title" required>
+
+        <label>Category</label>
+        <select name="category" required>
+            <option value="">Select category</option>
+            <option value="activity">Activity</option>
+            <option value="food">Food</option>
+        </select>
+
+        <label>Location</label>
+        <input type="text" name="location" placeholder="e.g. Glasgow" required>
+
+        <label>Description</label>
+        <textarea name="description" required></textarea>
+
+        <label>Upload Image</label>
+        <input type="file" name="image" id="image-input" accept="image/*" required>
+
+        <div class="image-preview" id="image-preview"></div>
+
+        <button class=upload-button type="submit">Upload</button>
+
+        <div id="message" class="message"></div>
+    </form>
+</div>
+
+<script>
+
+const imageInput = document.getElementById('image-input');
+const preview = document.getElementById('image-preview');
+
+imageInput.addEventListener('change', function(){
+    const file = this.files[0];
+    if(file){
+        const reader = new FileReader();
+        reader.onload = function(e){
+            preview.innerHTML = `<img src="${e.target.result}">`;
+        }
+        reader.readAsDataURL(file);
+    }
+});
+
+document.getElementById('recommendation-form').addEventListener('submit', function(e){
+    e.preventDefault();
+
+    const messageDiv = document.getElementById('message');
+    messageDiv.innerHTML = '';
+
+    const formData = new FormData(this);
+
+    fetch("{% url 'upload_recommendation' %}", {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+        },
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.success){
+            messageDiv.innerHTML = '<div class="success">Recommendation uploaded!</div>';
+            this.reset();
+            preview.innerHTML = '';
+        } else {
+            messageDiv.innerHTML = `<div class="error">${data.error}</div>`;
+        }
+    })
+    .catch(() => {
+        messageDiv.innerHTML = '<div class="error">Something went wrong.</div>';
+    });
+});
+</script>
+
+</body>
+</html>
