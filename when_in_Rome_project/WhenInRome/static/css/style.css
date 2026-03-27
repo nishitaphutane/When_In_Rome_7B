@@ -147,4 +147,54 @@
 .alert-empty-category {
     border: 2px dashed #d1cfcb;
     background: rgba(255,255,255,0.3);
+.stamp {
+    position: absolute;
+    opacity: 0.8;
+    z-index: 1;
+}
+
+.stamp {
+    position: absolute;
+    opacity: 0.8;
+    z-index: 1;
+}
+
+.pisa {
+    rotate: 18.1deg;
+    left: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 200px;
+}
+
+.vatican {
+    top: 40px;
+    right: 40px;
+    width: 220px;
+}
+
+.colosseum {
+    rotate: -12.2deg;
+    bottom: 40px;
+    right: 60px;
+    width: 220px;
+}
+
+.upload-rec-btn {
+    display: inline-block;
+    font-family: 'garet', sans-serif;
+    font-size: 0.88rem;
+    padding: 8px 18px;
+    border: 2px solid #5b5b5b;
+    border-radius: 10px;
+    background: #f7f7f7;
+    color: #333;
+    text-decoration: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.14);
+    transition: background 0.2s ease;
+    white-space: nowrap;
+}
+
+.upload-rec-btn:hover {
+    background: #ececec;
 }

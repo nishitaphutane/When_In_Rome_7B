@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
+from django.utils.timezone import now
 
 #model to store information about cities
 
@@ -48,6 +49,10 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(blank=True)
     picture = models.ImageField(upload_to='profile_images', blank=True)
+    pronouns = models.CharField(max_length=50, blank=True)
+    city = models.CharField(max_length=128, blank=True)
+    country = models.CharField(max_length=128, blank=True)
+    is_verified = models.BooleanField(default=False)
     followers = models.ManyToManyField(
         User,
         blank=True,
@@ -56,6 +61,14 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+class VisitedCity(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='visited_cities')
+    city_name = models.CharField(max_length=128)
+    country_flag = models.CharField(max_length=10, blank=True)  # e.g. "🇬🇧"
+
+    def __str__(self):
+        return f"{self.user.username} visited {self.city_name}"
 
 #model to store reviews and ratings for recommendations
 class Review(models.Model):
