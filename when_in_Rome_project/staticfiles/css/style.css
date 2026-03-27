@@ -14,7 +14,6 @@
     font-style: normal;
 }
 
-/* --- 2. GENERAL PAGE STYLES --- */
 .body {
     background-color: #E3DFD9;
     color: #211E20;
@@ -34,7 +33,6 @@ a:hover {
     color: #7B9BAF;
 }
 
-/* --- 3. HERO & NAVIGATION (GLASGOW UI) --- */
 .hero-section {
     background-size: cover;
     background-position: center;
@@ -73,14 +71,13 @@ a:hover {
     color: white;
 }
 
-
 .stamp-card {
     background: white;
     padding: 20px;
     margin-bottom: 20px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.08);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border-radius: 0; 
+    border-radius: 0;
 }
 
 .stamp-card:hover {
@@ -94,7 +91,7 @@ a:hover {
     height: 280px;
     object-fit: cover;
     border: 10px solid #001f3f;
-    border-radius: 35px; 
+    border-radius: 35px;
 }
 
 .recommendation-title {
