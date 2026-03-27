@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@700&family=Special+Elite&display=swap');
 
 @font-face {
     font-family: 'black-mango';
@@ -7,18 +7,34 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'garet';
+    src: url('../fonts/Garet-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* --- 2. GENERAL PAGE STYLES --- */
 .body {
     background-color: #E3DFD9;
     color: #211E20;
-    font-family: 'Arial', sans-serif;
+    font-family: 'garet', 'Arial', sans-serif;
+    margin: 0;
+    min-height: 100vh;
 }
 
-.results-title {
-    font-family: 'black-mango', serif;
-    color: #3a2e00;
-    letter-spacing: -1px;
+a {
+    color: #211E20;
+    font-family: 'garet';
+    text-decoration: none;
+    transition: 0.2s;
 }
 
+a:hover {
+    color: #7B9BAF;
+}
+
+/* --- 3. HERO & NAVIGATION (GLASGOW UI) --- */
 .hero-section {
     background-size: cover;
     background-position: center;
@@ -28,15 +44,15 @@
     position: relative;
 }
 
-.hero-description {
-    max-width: 700px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
-}
-
 .logo-cursive {
     font-family: 'Dancing Script', cursive;
     font-size: 2.5rem;
     color: white !important;
+}
+
+.hero-description {
+    max-width: 700px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
 }
 
 .hero-search-container {
@@ -56,6 +72,7 @@
     background-color: #c59b56;
     color: white;
 }
+
 
 .stamp-card {
     background: white;
@@ -80,71 +97,157 @@
     border-radius: 35px; 
 }
 
-.recommendation-stamp {
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    background-color: #fff;
-    border-radius: 0;
-    border: none;
-}
-
-.recommendation-stamp:hover {
-    transform: translateY(-10px) rotate(-1.5deg);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.12) !important;
-    background-color: #fffef9;
-}
-
-.rec-image-holder {
-    height: 220px;
-    border: 10px solid #001f3f;
-    border-radius: 25px;
-}
-
-.rec-img-fit {
-    object-fit: cover;
-}
-
 .recommendation-title {
     font-family: 'black-mango', serif;
     font-size: 1.4rem;
+    color: #211E20;
 }
 
-.category-icon {
-    font-size: 0.7em;
+.login-page {
+    background-color: #E3DFD9;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
 }
 
-.glasgow-intro {
+.login-container {
+    background-color: #7f9cab;
+    padding: 60px 40px;
+    border-radius: 30px;
+    width: 350px;
+    text-align: center;
+    color: white;
+    z-index: 2;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+
+.login-container h1 {
+    font-family: 'black-mango';
+    font-weight: lighter;
+    font-size: 3rem;
+    margin-bottom: 30px;
+}
+
+.login-container input {
+    font-family: 'garet';
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 8px;
+}
+
+.login-container button {
+    font-family: 'black-mango';
+    font-size: 1.2rem;
+    margin-top: 20px;
+    padding: 10px 25px;
+    border-radius: 20px;
+    border: none;
     background: white;
-    border-left: 6px solid #deb169;
+    color: #7f9cab;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-.glance-strip {
-    background-color: #f8f6f2;
-    border: 1px solid #e0ddd8;
+.login-container button:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
 }
 
-.category-divider {
-    opacity: 0.1;
+.stamp {
+    position: absolute;
+    opacity: 0.8;
+    z-index: 1;
+    pointer-events: none;
 }
 
-.transition-hover {
-    transition: transform 0.3s ease;
+.pisa {
+    rotate: 18.1deg;
+    left: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 200px;
 }
 
-.transition-hover:hover {
-    transform: translateY(-5px);
+.vatican {
+    top: 40px;
+    right: 40px;
+    width: 220px;
+}
+
+.colosseum {
+    rotate: -12.2deg;
+    bottom: 40px;
+    right: 60px;
+    width: 220px;
+}
+
+.location-name {
+    font-family: 'black-mango';
+    color: #211E20;
+    font-size: 40px;
+    font-weight: 500;
+}
+
+.subtitle {
+    font-family: 'garet';
+    color: #211E20;
+    font-weight: lighter;
+    margin-top: -15px;
+    font-size: 30px;
+}
+
+.star-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+.bar {
+    height: 6px;
+    background-color: white;
+    flex: 1;
+    border-radius: 4px;
+}
+
+.username {
+    font-family: 'black-mango';
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.comment {
+    font-size: 18px;
+    color: #211E20;
+    font-family: 'garet';
+    line-height: 1.4;
+}
+
+.upload-rec-btn {
+    display: inline-block;
+    font-family: 'garet', sans-serif;
+    font-size: 0.88rem;
+    padding: 8px 18px;
+    border: 2px solid #5b5b5b;
+    border-radius: 10px;
+    background: #f7f7f7;
+    color: #333;
+    text-decoration: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .btn-dark {
     background-color: #001f3f;
     border: none;
+    color: white;
 }
 
 .btn-dark:hover {
     background-color: #deb169;
-    color: white;
-}
-
-.alert-empty-category {
-    border: 2px dashed #d1cfcb;
-    background: rgba(255,255,255,0.3);
 }
