@@ -1,0 +1,45 @@
+{% extends 'WhenInRome/base.html' %}
+ 
+{% block title %}Search Results{% endblock %}
+ 
+{% block content %}
+<div class="container">
+    <h2>Search Results for "{{ query }}"</h2>
+ 
+    <section>
+        <h3>City</h3>
+        {% if cities %}
+            {% for city in cities %}
+                <div class="result-card">
+                    <h4>{{ city.name }}</h4>
+                    <p>{{ city.country }}</p>
+                    <p>{{ city.description }}</p>
+                    <a href="{% url 'WhenInRome:show_category' city.slug %}">View City</a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No cities found.</p>
+        {% endif %}
+    </section>
+ 
+    <section>
+        <h3>Places</h3>
+        {% if recommendations %}
+            {% for rec in recommendations %}
+                <div class="result-card">
+                    <h4>{{ rec.title }}</h4>
+                    <p>{{ rec.location }}</p>
+                    <p>{{ rec.description }}</p>
+                    <p>in {{ rec.city.name }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No places found.</p>
+        {% endif %}
+    </section>
+ 
+    {% if not cities and not recommendations %}
+        <p>No results found for "{{ query }}". Try a different search!</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -326,3 +326,18 @@ def update_visited(request):
 
     return redirect('WhenInRome:profile', username=request.user.username)
 
+def search_view(request):
+    query = request.GET.get('q', '').strip()
+    cities = []
+    recommendations = []
+ 
+    if query:
+        # filter(name__icontains) = filter(field to do a case_insensetive search in)
+        cities = City.objects.filter(name__icontains=query) | City.objects.filter(country__icontains=query)
+        recommendations = Recommendation.objects.filter(title__icontains=query) | Recommendation.objects.filter(location__icontains=query)
+ 
+    return render(request, 'WhenInRome/search_results.html', {
+        'cities': cities,
+        'recommendations': recommendations,
+        'query': query
+    })
