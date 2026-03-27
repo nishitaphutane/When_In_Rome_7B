@@ -3,232 +3,87 @@
 
 {% block content %}
 <div class="container mt-5">
-    <div class="text-center mb-4">
-        <h2 class="display-4 fw-bold">Explore Glasgow</h2>
-        <p class="text-muted"> Scotland's most vibrant city - discover it by category</p>
+    <div class="text-center mb-5">
+        <h2 class="results-title display-4" style="font-family: 'black-mango';">Explore Glasgow</h2>
+        <p class="text-muted">Scotland's most vibrant city - discover it by category</p>
     </div>
 
-    <div class="glasgow-intro mb-4">
+    <div class="glasgow-intro mb-5 p-4 rounded-4 shadow-sm bg-white">
         <div class="glasgow-intro-text">
-            <span class="glasgow-tag">🏙️ Glasgow, Scotland</span>
-            <p>
-                Scotland's largest city and cultural powerhouse...Glasgow is famous for its
+            <span class="badge bg-dark rounded-pill mb-2">🏙️ Glasgow, Scotland</span>
+            <p class="lead" style="font-family: 'garet'; color: #444;">
+                Scotland's largest city and cultural powerhouse... Glasgow is famous for its
                 world-class museums, buzzing food scene, Victorian architecture, and some of
-                the font-friendliest locals you'll ever meet. Whether you're after hidden street-art
+                the friendliest locals you'll ever meet. Whether you're after hidden street-art
                 lanes in the West End or a classic pie and a pint in the East End, there's
                 always something new to discover.
             </p>
-            <div class="glasgow-intro-facts">
-                <span>🌧️ Mild &amp; rainy year-round</span>
-                <span>🚇 Clockwork Orange underground</span>
-                <span>🆓 Most museums are free entry</span>
-                <span>🎨 Street art capital of Scotland</span>
+            <div class="d-flex flex-wrap gap-3 mt-3">
+                <span class="text-muted small">🌧️ Mild & rainy year-round</span>
+                <span class="text-muted small">🚇 Clockwork Orange underground</span>
+                <span class="text-muted small">🆓 Most museums are free entry</span>
+                <span class="text-muted small">🎨 Street art capital</span>
             </div>
         </div>
     </div>
 
-    <div class="filter-bar mb-4">
-        <div class="filter-chip-container">
-            <span class="filter-chip active">All</span>
-            <span class="filter-chip">#WestEnd</span>
-            <span class="filter-chip">#MerchantCity</span>
-            <span class="filter-chip">#HiddenGems</span>
-            <span class="filter-chip">#Vegan</span>
-            <span class="filter-chip">#FamilyFriendly</span>
-        </div>
-    </div>
-            
-    <div class="category-grid mb-5">
+    <div class="row g-4 mb-5">
         {% if categories %}
             {% for city in categories %}
-                <a href="{% url 'WhenInRome:show_category' city.slug %}" class="text-decoration-none text-dark">
-                    <div class="stamp-card shadow-lg border-0 transition-hover">
-                        <div class="position-relative overflow-hidden" style="border-radius: 15px 15px 0 0;">
-                            <img src="{% if city.image %}{{ city.image.url }}{% else %}{% static 'images/placeholder.jpg' %}{% endif %}"
-                                class="img-fluid w-100 card-img"
-                                style="height: 300px; object-fit:cover;"
-                                alt="{{ city.name }}">
-                        </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="stamp-card shadow-lg">
+                        <a href="{% url 'WhenInRome:show_category' city.slug %}" class="text-decoration-none text-dark">
+                            <div class="stamp-img-container">
+                                <img src="{% if city.image %}{{ city.image.url }}{% else %}{% static 'images/placeholder.jpg' %}{% endif %}"
+                                     class="stamp-image" alt="{{ city.name }}">
+                            </div>
 
-                        <div class="p-3 bg-white d-flex justify-content-between align-items-center" style="border-radius: 0 0 15px 15px;">
-                            <div>
-                                <h3 class="fw-bold mb-1">{{ city.name }}</h3>
-                                <p class="text-muted mb-0">{{ city.country }}</p>
+                            <div class="mt-3 text-center">
+                                <h3 class="fw-bold mb-1" style="font-family: 'black-mango';">{{ city.name }}</h3>
+                                <p class="text-muted small mb-0">{{ city.country }}</p>
                             </div>
-                            <div class="upvote-circle d-flex align-items-center justify-content-center">
-                                <span class="fs-4">↑</span>
-                            </div>
+                        </a>
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+                             <small class="text-muted">
+                                <span id="vote-count-{{ city.id }}" class="fw-bold">{{ city.total_upvotes }}</span> upvotes
+                            </small>
+                            <div class="upvote-btn" data-categoryid="{{ city.id }}" style="cursor:pointer; color: #28a745; font-size: 1.5rem;">↑</div>
                         </div>
                     </div>
-                </a>
+                </div>
             {% endfor %}
         {% else %}
-            <div class="alert alert-info" style="grid-column: 1 / -1;">
-                No categories found. Start by populating your database
+            <div class="col-12">
+                <div class="alert alert-info text-center">No categories found. Start by populating your database!</div>
             </div>
         {% endif %}
     </div>
 
-        
-        <div class="glance-strip mt-3 mb-5">
-            <h5 class="glance-title">Glasgow at a Glance</h5>
-            <div class="glance-grid">
-                <div class="glance-card">
-                    <div class="glance-icon">🌦️</div>
-                    <div class="glance-info">
-                        <strong>Weather</strong>
-                        <p>Cool &amp; overcast most of the year. Pack layers and a waterproof - always.</p>
-                    </div>
-                </div>
-                <div class="glance-card">
-                    <div class="glance-icon">🚇</div>
-                    <div class="glance-info">
-                        <strong>Getting Around</strong>
-                        <p>Use the Subway (Clockwork Orange), buses, or walk - the city centre is very compact.</p>
-                    </div>
-                </div>
-                <div class="glance-card">
-                    <div class="glance-icon">🗓️</div>
-                    <div class="glance-info">
-                        <strong>Best Time to Visit</strong>
-                        <p>May-September for the longest days. August brings festivals and outdoor events.</p>
-                    </div>
-                </div>
-                <div class="glance-card">
-                    <div class="glance-icon">💷</div>
-                    <div class="glance-info">
-                        <strong>Budget Tips</strong>
-                        <p>Kelvingrove, Riverside Museum, and the Gallery of Modern Art are all free to enter.</p>
-                    </div>
-                </div>
+    <div class="glance-strip py-5 px-4 rounded-5 mb-5" style="background-color: #f8f6f2; border: 1px solid #e0ddd8;">
+        <h5 class="glance-title mb-4 text-center fw-bold" style="font-family: 'black-mango'; font-size: 2rem;">Glasgow at a Glance</h5>
+        <div class="row g-4 text-center">
+            <div class="col-md-3">
+                <div class="fs-1 mb-2">🌦️</div>
+                <h6 class="fw-bold">Weather</h6>
+                <p class="small text-muted">Cool & overcast. Pack layers and a waterproof.</p>
+            </div>
+            <div class="col-md-3">
+                <div class="fs-1 mb-2">🚇</div>
+                <h6 class="fw-bold">Getting Around</h6>
+                <p class="small text-muted">Use the Subway (Clockwork Orange) or walk.</p>
+            </div>
+            <div class="col-md-3">
+                <div class="fs-1 mb-2">🗓️</div>
+                <h6 class="fw-bold">Best Time</h6>
+                <p class="small text-muted">May-Sept for long days. August for festivals.</p>
+            </div>
+            <div class="col-md-3">
+                <div class="fs-1 mb-2">💷</div>
+                <h6 class="fw-bold">Budget Tips</h6>
+                <p class="small text-muted">Kelvingrove and Riverside museums are free.</p>
             </div>
         </div>
-    </div> 
-
-    <style>
-        .glasgow-intro { 
-            background: linear-gradient(135deg, #fffdf7 0%, #fdf6e3 100%); 
-            border: 1px solid #e8dfc8; 
-            border-radius: 16px; 
-            padding: 28px 32px; 
-        }
-        .glasgow-tag {
-            display: inline-block;
-            background: #ffde59;
-            color: #3a2e00;
-            font-size: 0.78rem;
-            font-weight: 600;
-            padding: 4px 12px;
-            border-radius: 20px;
-            margin-bottom: 12px;
-        }
-        .glasgow-intro-facts {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .glasgow-intro-facts span {
-            background: #fff;
-            border: 1px solid #e0d8c8;
-            border-radius: 20px;
-            padding: 5px 14px;
-            font-size: 0.82rem;
-            color: #5a5248;
-        }
-
-        .filter-chip-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px
-        }
-
-        .filter-chip {
-            background: #fff;
-            border: 1.5px solid #e0d8c8;
-            border-radius: 999px;
-            padding: 6px 16px;
-            font-size: 0.82rem;
-            color: #5a5248;
-            cursor: pointer;
-            transition: 0.2s;
-            user-select: none;
-        }
-        .filter-chip:hover, .filter-chip.active {
-            background: #ffde59;
-            border-color: #e6c200;
-            color: #3a2e00;
-            font-weight: 600;
-        }
-        .category-grid{
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 24px;
-        }
-        .card-img {
-            height: 220px;
-            object-fit: cover;
-            transition: transform 0.4s ease;
-        }
-
-        .transition-hover {
-            transition: 0.3s;
-            border-radius: 15px;
-            overflow: hidden;
-        }
-        .transition-hover:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0,0.1) !important;
-        }
-        .transition-hover:hover .card-img {
-            transform: scale(1.04);
-        }
-        .upvote-circle {
-            width: 40px;
-            height: 40px;
-            background: #f8f9fa;
-            border-radius: 50%;
-            transition: 0.3s;
-        }
-        .transition-hover:hover .upvote-circle {
-            background: #ffde59;
-        }
-        .glance-strip {
-            background: #fff;
-            border: 1px solid #ece8e0;
-            border-radius: 16px;
-            padding: 28px 32px;
-        }
-        .glance-title {
-            font-weight: 700;
-            font-size: 0.8rem;  
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: #9a9288;
-            margin-bottom: 20px;
-        }
-        .glance-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 24px;
-        }
-        .category-grid h3 {
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            font-size: 1.2rem;
-        }
-        .glance-card { display: flex; gap: 14px; }
-        .glance-icon { font-size: 1.8rem; }
-</style>
-
-<script>
-    document.querySelectorAll('.filter-chip').forEach(chip =>{
-        chip.addEventListener('click', () => {
-            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-            chip.classList.add('active');
-        });
-    });
-</script>
+    </div>
+</div>
 {% endblock %}

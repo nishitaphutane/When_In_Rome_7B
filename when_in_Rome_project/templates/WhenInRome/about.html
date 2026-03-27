@@ -1,0 +1,59 @@
+{% extends 'WhenInRome/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    About When In Rome
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8 text-center">
+            <h1 class="display-4 fw-bold mb-4">About When In Rome</h1>
+            <p class="lead text-muted mb-5">
+                This project is designed to help users discover amazing places to visit in Glasgow. 
+                Whether you're looking for historic landmarks, local eats, or the easiest way to get 
+                around the city, our guide has been curated to help you explore like a local.
+            </p>
+
+            <hr class="category-divider my-5">
+
+            <div class="card shadow-sm border-0 rounded-4 p-4 bg-light mb-5">
+                <h2 class="h4 fw-bold mb-4">Meet Team 7B</h2>
+                <p class="text-muted mb-4">This website was developed by:</p>
+                
+                <div class="row text-start justify-content-center">
+                    <div class="col-sm-10 col-md-8">
+                        <ul class="list-group list-group-flush bg-transparent">
+                            <li class="list-group-item bg-transparent border-0 py-3">
+                                <span class="fw-bold d-block">Hala Khodair</span>
+                                <span class="text-muted small">3075604k@student.gla.ac.uk</span>
+                            </li>
+                            <li class="list-group-item bg-transparent border-0 py-3">
+                                <span class="fw-bold d-block">Nishita Phutane</span>
+                                <span class="text-muted small">3071117n@student.gla.ac.uk</span>
+                            </li>
+                            <li class="list-group-item bg-transparent border-0 py-3">
+                                <span class="fw-bold d-block">Sophie DelMonico</span>
+                                <span class="text-muted small">2979687d@student.gla.ac.uk</span>
+                            </li>
+                            <li class="list-group-item bg-transparent border-0 py-3">
+                                <span class="fw-bold d-block">Lewis Fong</span>
+                                <span class="text-muted small">3007573f@student.gla.ac.uk</span>
+                            </li>
+                            <li class="list-group-item bg-transparent border-0 py-3">
+                                <span class="fw-bold d-block">Eimantas Bogusis</span>
+                                <span class="text-muted small">3015017b@student.gla.ac.uk</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <p><a href="{% url 'WhenInRome:index' %}" class="btn btn-outline-dark rounded-pill px-4">← Back to Home</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
