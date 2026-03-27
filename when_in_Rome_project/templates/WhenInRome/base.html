@@ -29,11 +29,11 @@
                             <a class="call-to-action" href="{% url 'WhenInRome:login' %}">Login</a>
                         {% endif %}
                 </div>
-                    <form class="search-box-wrapper">
-                        <input type="text" placeholder="Where will you go?">
-                        <button class="btn btn-search">Search</button>
+                    <form class="search-box-wrapper" action="{% url 'WhenInRome:search' %}" method="get">
+                        <input type="text" name="q" placeholder="Where will you go?" autocomplete="off">
+                        <button class="btn btn-search" type="submit">Search</button>
                     </form>
-                    <a id=about href="{% url 'WhenInRome:about' %}">About</a>
+                    <a id="about" href="{% url 'WhenInRome:about' %}">About</a>
     </div>    
 
     {% block content %}{% endblock %}
