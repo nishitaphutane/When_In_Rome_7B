@@ -5,12 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./../../static/css/style.css">
-
-<title>Upload Recommendation</title>
-
+    <title>Upload Recommendation</title>
 </head>
 <body>
-    
+
 <img src="{% static 'images/pisaSticker.png' %}" class="stamp pisa" alt="leaning tower of pisa in passport stamp style">
 <img src="{% static 'images/romeSticker.png' %}" class="stamp vatican" alt="Vatican in passport stamp style">
 <img src="{% static 'images/colosseumSticker.png' %}" class="stamp colosseum" alt="colosseum in passport stamp style">
@@ -27,44 +25,46 @@
         <label>Category</label>
         <select name="category" required>
             <option value="">Select category</option>
-            <option value="activity">Activity</option>
-            <option value="food">Food</option>
+            {% for city in cities %}
+                <option value="{{ city.slug }}">{{ city.name }}</option>
+            {% empty %}
+                <option value="" disabled>No categories available</option>
+            {% endfor %}
         </select>
 
         <label>Location</label>
-        <input type="text" name="location" placeholder="e.g. Glasgow" required>
+        <input type="text" name="location" placeholder="e.g. Glasgow">
 
         <label>Description</label>
-        <textarea name="description" required></textarea>
+        <textarea name="description"></textarea>
 
         <label>Upload Image</label>
-        <input type="file" name="image" id="image-input" accept="image/*" required>
+        <input type="file" name="image" id="image-input" accept="image/*">
 
         <div class="image-preview" id="image-preview"></div>
 
-        <button class=upload-button type="submit">Upload</button>
+        <button class="upload-button" type="submit">Upload</button>
 
         <div id="message" class="message"></div>
     </form>
 </div>
 
 <script>
-
 const imageInput = document.getElementById('image-input');
 const preview = document.getElementById('image-preview');
 
-imageInput.addEventListener('change', function(){
+imageInput.addEventListener('change', function() {
     const file = this.files[0];
-    if(file){
+    if (file) {
         const reader = new FileReader();
-        reader.onload = function(e){
+        reader.onload = function(e) {
             preview.innerHTML = `<img src="${e.target.result}">`;
-        }
+        };
         reader.readAsDataURL(file);
     }
 });
 
-document.getElementById('recommendation-form').addEventListener('submit', function(e){
+document.getElementById('recommendation-form').addEventListener('submit', function(e) {
     e.preventDefault();
 
     const messageDiv = document.getElementById('message');
@@ -72,7 +72,7 @@ document.getElementById('recommendation-form').addEventListener('submit', functi
 
     const formData = new FormData(this);
 
-    fetch("{% url 'upload_recommendation' %}", {
+    fetch("{% url 'WhenInRome:upload_recommendation' %}", {  // fixed namespace
         method: 'POST',
         headers: {
             'X-CSRFToken': formData.get('csrfmiddlewaretoken')
@@ -81,16 +81,16 @@ document.getElementById('recommendation-form').addEventListener('submit', functi
     })
     .then(res => res.json())
     .then(data => {
-        if(data.success){
-            messageDiv.innerHTML = '<div class="success">Recommendation uploaded!</div>';
+        if (data.success) {
+            messageDiv.innerHTML = '<div class="success">Recommendation uploaded successfully!</div>';
             this.reset();
             preview.innerHTML = '';
         } else {
-            messageDiv.innerHTML = `<div class="error">${data.error}</div>`;
+            messageDiv.innerHTML = `<div class="error">${data.error || 'Upload failed.'}</div>`;
         }
     })
     .catch(() => {
-        messageDiv.innerHTML = '<div class="error">Something went wrong.</div>';
+        messageDiv.innerHTML = '<div class="error">Something went wrong. Please try again.</div>';
     });
 });
 </script>
