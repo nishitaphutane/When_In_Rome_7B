@@ -27,11 +27,11 @@
         </div>
     </div>
 
-    <div class="row g-5 mb-5">
+    <div class="row g-4 mb-5">
         {% if categories %}
             {% for city in categories %}
-                <div class="col-md-4">
-                    <div class="stamp-card shadow-lg transition-hover">
+                <div class="col-md-6 col-lg-4">
+                    <div class="stamp-card shadow-lg">
                         <a href="{% url 'WhenInRome:show_category' city.slug %}" class="text-decoration-none text-dark">
                             <div class="stamp-img-container">
                                 <img src="{% if city.image %}{{ city.image.url }}{% else %}{% static 'images/placeholder.jpg' %}{% endif %}"
@@ -55,41 +55,33 @@
             {% endfor %}
         {% else %}
             <div class="col-12">
-                <div class="alert alert-info">No categories found. Start by populating your database!</div>
+                <div class="alert alert-info text-center">No categories found. Start by populating your database!</div>
             </div>
         {% endif %}
     </div>
 
     <div class="glance-strip py-5 px-4 rounded-5 mb-5" style="background-color: #f8f6f2; border: 1px solid #e0ddd8;">
         <h5 class="glance-title mb-4 text-center fw-bold" style="font-family: 'black-mango'; font-size: 2rem;">Glasgow at a Glance</h5>
-        <div class="row g-4">
+        <div class="row g-4 text-center">
             <div class="col-md-3">
-                <div class="text-center">
-                    <div class="fs-1 mb-2">🌦️</div>
-                    <h6 class="fw-bold">Weather</h6>
-                    <p class="small text-muted">Cool & overcast. Pack layers and a waterproof - always.</p>
-                </div>
+                <div class="fs-1 mb-2">🌦️</div>
+                <h6 class="fw-bold">Weather</h6>
+                <p class="small text-muted">Cool & overcast. Pack layers and a waterproof.</p>
             </div>
             <div class="col-md-3">
-                <div class="text-center">
-                    <div class="fs-1 mb-2">🚇</div>
-                    <h6 class="fw-bold">Getting Around</h6>
-                    <p class="small text-muted">Use the Subway (Clockwork Orange) or walk - it's compact!</p>
-                </div>
+                <div class="fs-1 mb-2">🚇</div>
+                <h6 class="fw-bold">Getting Around</h6>
+                <p class="small text-muted">Use the Subway (Clockwork Orange) or walk.</p>
             </div>
             <div class="col-md-3">
-                <div class="text-center">
-                    <div class="fs-1 mb-2">🗓️</div>
-                    <h6 class="fw-bold">Best Time</h6>
-                    <p class="small text-muted">May-Sept for long days. August for festivals.</p>
-                </div>
+                <div class="fs-1 mb-2">🗓️</div>
+                <h6 class="fw-bold">Best Time</h6>
+                <p class="small text-muted">May-Sept for long days. August for festivals.</p>
             </div>
             <div class="col-md-3">
-                <div class="text-center">
-                    <div class="fs-1 mb-2">💷</div>
-                    <h6 class="fw-bold">Budget Tips</h6>
-                    <p class="small text-muted">Kelvingrove and Riverside museums are totally free.</p>
-                </div>
+                <div class="fs-1 mb-2">💷</div>
+                <h6 class="fw-bold">Budget Tips</h6>
+                <p class="small text-muted">Kelvingrove and Riverside museums are free.</p>
             </div>
         </div>
     </div>
