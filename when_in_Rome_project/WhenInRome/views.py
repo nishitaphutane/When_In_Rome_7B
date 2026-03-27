@@ -15,6 +15,34 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 
 
+@login_required
+def upload_recommendation(request):
+    if request.method == 'POST':
+        form = RecommendationForm(request.POST, request.FILES)
+        if form.is_valid():
+            category_value = request.POST.get('category', '').strip()
+            city = City.objects.filter(slug=category_value).first()
+
+            if not city:
+                city = City.objects.filter(name__iexact=category_value).first()
+
+            if not city:
+                return JsonResponse(
+                    {"error": f"Category '{category_value}' not found."},
+                    status=400
+                )
+
+            recommendation = form.save(commit=False)
+            recommendation.city = city
+            recommendation.user = request.user
+            recommendation.save()
+
+            return JsonResponse({"success": True})
+        else:
+            return JsonResponse({"error": "Invalid form data.", "fields": form.errors}, status=400)
+
+    cities = City.objects.all()
+    return render(request, 'WhenInRome/upload_recommendation.html', {'cities': cities})
 def index(request):
     city_list = City.objects.annotate(total_upvotes=Count('recommendation__upvote')).order_by('-total_upvotes')[:5]
     context_dict = {'categories': city_list}
