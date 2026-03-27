@@ -59,7 +59,7 @@ a:hover {
 }
 
 .btn-search {
-    background-color: #deb169;
+    background-color: #030852;
     color: white;
     border: none;
     font-weight: bold;
@@ -67,7 +67,7 @@ a:hover {
 }
 
 .btn-search:hover {
-    background-color: #c59b56;
+    background-color: #090cb6;
     color: white;
 }
 
